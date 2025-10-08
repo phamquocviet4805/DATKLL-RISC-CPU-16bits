@@ -20,9 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MUX_2_1_PC(
-        input[15:0] B, imm,input alu_src, output [15:0] outmux
-    );
+module MUX_2_1_PC( input[15:0] B, imm,input alu_src, output [15:0] outmux );
     assign outmux = (alu_src == 0) ? B : imm;
 endmodule
 

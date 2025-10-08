@@ -20,8 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MUX_3_1_RET(
-        input[15:0] A, B,input [1:0] PC_sel,input [15:0] C, output [15:0] outmux
-    );
+module MUX_3_1_RET( input[15:0] A, B, C, input [1:0] PC_sel, output [15:0] outmux );
     assign outmux = (PC_sel == 2'b00) ? A : (PC_sel == 2'b01)? B : (PC_sel == 2'b10) ? C : A;
 endmodule

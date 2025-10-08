@@ -21,7 +21,7 @@
 
 
 module MUX_alu_2_1(
-        input[15:0] B, imm,input alu_src, output [15:0] outmux
+        input[15:0] B, imm, input alu_src, output [15:0] outmux
     );
     assign outmux = (alu_src == 0) ? B : imm;
 endmodule

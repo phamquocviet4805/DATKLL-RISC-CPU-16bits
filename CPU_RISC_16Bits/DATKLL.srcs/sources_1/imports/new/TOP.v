@@ -19,10 +19,11 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module TOP( input  clk,reset,interrupt_pending,
+module TOP( 
+input  clk, reset, interrupt_pending,
 output [15:0] r3, 
 input [1:0] mux_clk
-    );
+);
 localparam ICR_fix_add = 100;
 localparam CONST = 2;
 wire is_bnez, mem_read_en, branch_out;

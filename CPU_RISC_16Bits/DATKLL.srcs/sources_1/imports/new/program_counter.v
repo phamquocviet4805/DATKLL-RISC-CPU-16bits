@@ -30,7 +30,7 @@ module program_counter (
 );
 initial begin
     pc_out = 0;
-    end   
+end   
 always @(posedge clk) begin
         if (pc_sel || icr_sel)
         begin
@@ -38,7 +38,7 @@ always @(posedge clk) begin
         end
         else begin
             pc_out <= pc_out + 2; 
-            end
-    end
+        end
+end
 endmodule
 

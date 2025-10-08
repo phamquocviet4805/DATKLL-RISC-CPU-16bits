@@ -108,22 +108,18 @@ assign instruction = {imem[address],imem[address+1]};
 assign opcode = instruction[15:12];
 
 assign instr_type =
-    (opcode == 4'b0000) ? 3'd0 : // R-type
-    ((opcode >= 4'b0001 && opcode <= 4'b0111) || opcode == 4'b1111) ? 3'd1 : // I-type
-    (opcode == 4'b1000) ? 3'd5 : //LI
-    (opcode == 4'b1001) ? 3'd2 : // S-type
-    (opcode == 4'b1010 || opcode == 4'b1011) ? 3'd3 : // B-type
-    (opcode == 4'b1100 || opcode == 4'b1101) ? 3'd4 : // J-type
-    (opcode == 4'b1110) ? 3'd6: // SYS-type
+    (opcode == 4'b0000 || opcode == 4'b0001 || opcode == 4'b0010 || 
+     opcode == 4'b1010 || opcode == 4'b1011) ? 3'd0 :                           // R-type
+    (opcode >= 4'b1000 && opcode <= 4'b0110) ? 3'd1 :                           // I-type
+    (opcode == 4'b1000 || opcode == 4'b1001) ? 3'd1 :                           // I-type
+    (opcode == 4'b0111 || opcode == 4'b1011 || opcode == 4'b1111) ? 3'd2 :      // J-type
+    (opcode == 4'b1110) ? 3'd3:                                                 // SYS-type
     3'd7;
 
-assign rd  = (instr_type == 3'd0 ) ? instruction[5:3] :(instr_type == 3'd1 ) ? instruction[8:6]  : (instr_type == 3'd5) ? instruction[11:9] : 3'b000 ;
-assign rs1 = (instr_type == 3'd0 || instr_type == 3'd1 || instr_type == 3'd2 || instr_type == 3'd3 ) ? instruction[11:9] : 3'b000;
-assign rs2 = (instr_type == 3'd0 || instr_type == 3'd2) ? instruction[8:6] : 3'b000;
+assign rd  = (instr_type == 3'd0 ) ? instruction[5:3] : 3'b000 ;
+assign rs1 = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[11:9] : 3'b000;
+assign rs2 = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[8:6] : 3'b000;
     
-assign funct3 = (instr_type == 3'd0 || instr_type == 3'd6 ) ? instruction[2:0] : // R-type
-                (opcode == 4'b0010) ? 3'b001 : (opcode == 4'b0101) ? 3'b011 : (opcode == 4'b0110) ? 3'b100 : (opcode == 4'b0100) ? 3'b101 : // I-type
-                (opcode == 4'b1111) ? 3'b001 : (opcode == 4'b1010) ? 3'b010 : (opcode == 4'b1011) ? 3'b011 : // B-type
-                3'b000;  
-endmodule
+assign funct3 = (instr_type == 3'd0 || instr_type == 3'd3 ) ? instruction[2:0] : 3'b000;   // R-type and SYS-type
 
+endmodule
