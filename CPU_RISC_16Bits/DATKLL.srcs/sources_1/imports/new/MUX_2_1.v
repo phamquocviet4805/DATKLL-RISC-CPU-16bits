@@ -21,7 +21,7 @@
 
 
 module MUX_2_1(
-        input[15:0] B, imm,input memtoreg, output [15:0] outmux
+        input[15:0] B, imm, input memtoreg, output[15:0] outmux
     );
     assign outmux = (memtoreg == 1'b0) ? B : (memtoreg == 1'b1)? imm : 0;
 endmodule

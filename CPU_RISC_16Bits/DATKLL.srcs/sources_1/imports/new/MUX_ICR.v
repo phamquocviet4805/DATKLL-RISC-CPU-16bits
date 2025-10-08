@@ -20,8 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MUX_ICR( 
-        input[15:0] B, icr,input src, output [15:0] out_mux
-    );
+module MUX_ICR( input[15:0] B, icr, input src, output [15:0] out_mux );
     assign out_mux = (src == 0) ? B : icr;
 endmodule

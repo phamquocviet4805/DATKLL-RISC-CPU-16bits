@@ -20,14 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module data_mem (                       
+module data_mem(                       
     input mem_write_en, clk,
     input mem_read_en,  
-    input reset,icr_sel,        
+    input reset, icr_sel,        
     input [15:0] addr,           
     input [15:0] write_data,  
-    input [15:0] sp_addr,  // value from PC
-    input push, // push from control unit
+    input [15:0] sp_addr,                   // value from PC
+    input push,                             // push from control unit
     input pop,
     output reg over_flow, under_flow,
     output [15:0] ret_addr, 
@@ -37,7 +37,7 @@ wire [15:0] ret_addr_plus_2;
 //reg [15:0] sp;
 reg [15:0] sp;
 //reg [7:0] memory [0:65534];  
-reg [7:0] memory [0:4094];   // 4Kb
+reg [7:0] memory [0:4094];                  // 4Kb
 //reg [7:0] memory [0:1023];
 //reg [15:0] save1_reg;
 //integer f;
@@ -56,34 +56,32 @@ end
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-    sp <= 16'h0FFE;
-    over_flow <= 0;
-    under_flow <=0;
-    end else
-    if (push || icr_sel) begin // full
-       if(sp <= (16'h0FF0 + 1))
-       begin
-       over_flow <= 1;
-       under_flow <=0;
-       end
-       else begin 
-       memory[sp] <=  ret_addr_plus_2[7:0];
-       memory[sp - 1] <=  ret_addr_plus_2[15:8];
-       sp <= sp - 2;
-       over_flow <= 0;
-       under_flow <=0;
-       end
-    end
-    else if (pop) begin //empty
-        if(sp <= (16'h0FF0 - 1))
-        begin
-        over_flow <= 0;
-        under_flow <=1;
-        end
-        else begin   
-        sp <= sp + 2;
+        sp <= 16'h0FFE;
         over_flow <= 0;
         under_flow <=0;
+    end else
+        if (push || icr_sel) begin //STACK FULL
+            if(sp <= (16'h0FF0 + 1)) begin
+                over_flow <= 1;
+                under_flow <=0;
+            end
+        else begin 
+            memory[sp] <= ret_addr_plus_2[7:0];
+            memory[sp - 1] <= ret_addr_plus_2[15:8];
+            sp <= sp - 2;
+            over_flow <= 0;
+            under_flow <=0;
+        end
+    end
+    else if (pop) begin //STACK EMPTY
+        if (sp <= (16'h0FF0 - 1)) begin
+            over_flow <= 0;
+            under_flow <=1;
+        end
+        else begin   
+            sp <= sp + 2;
+            over_flow <= 0;
+            under_flow <=0;
         end
     end
     else if (mem_write_en) begin

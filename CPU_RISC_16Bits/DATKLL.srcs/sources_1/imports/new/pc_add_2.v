@@ -20,7 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pc_add_2(  input [15:0] pc,input [1:0] imm, output [15:0] pc_out
-    );
+module pc_add_2( input [15:0] pc, input [1:0] imm, output [15:0] pc_out );
     assign pc_out = pc + imm;
 endmodule
