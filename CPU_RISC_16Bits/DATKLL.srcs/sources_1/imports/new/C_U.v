@@ -22,7 +22,7 @@
 
 module C_U( 
     input [3:0] opcode, input[2:0] funct3,
-    output reg mem_read,memtoreg, reg_wrt, is_bnez, alu_src, mem_write, pc_sel, ei_set, di_clear, branch, push, pop, 
+    output reg mem_read,memtoreg, reg_wrt, is_bnez, alu_src, mem_write, pc_sel, ei_set, di_clear, branch, push, pop,
     output reg [1:0] alu_op, PCsel, 
     output reg[2:0] immtype
 );
@@ -176,7 +176,7 @@ begin
         push = 1'b0;
         pc_sel = 1'b1;
         ei_set = 1'b0;
-        di_clear = 1'b0; 
+        di_clear = 1'b0;
     end
     4'b1011:  // BNQZ
     begin
@@ -266,7 +266,7 @@ begin
             PCsel = 2'b00;
             pop = 1'b0;
             push = 1'b0;
-            pc_sel = 1'b0; 
+            ei_set = 1'b0;
             di_clear = 1'b0;
         end
         3'b010: begin // EI
