@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module debounce_interrupt( input interrupt_pending,clk, output interrupt_rise );
+module debounce_interrupt( input interrupt_pending, clk, output interrupt_rise );
     reg prev_interrupt_pending;
     always @(negedge clk) begin
         prev_interrupt_pending <= interrupt_pending;

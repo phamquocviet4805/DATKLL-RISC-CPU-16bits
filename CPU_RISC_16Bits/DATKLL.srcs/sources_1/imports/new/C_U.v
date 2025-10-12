@@ -29,48 +29,61 @@ module C_U(
 always @(*)
 begin
     case(opcode) 
-    4'b0000:  // R-type
-    begin
-        case(funct3)
-        3'b000,3'b001,3'b011,3'b100,3'b101:
-        begin 
-            alu_src = 1'b0;
-            reg_wrt = 1'b1;
-            mem_read = 1'b0;
-            mem_write = 1'b0;
-            memtoreg = 1'b1;
-            is_bnez = 1'b0;
-            alu_op = 2'b00;
-            branch = 1'b0;   
-            immtype = 3'b111;
-            PCsel = 2'b00;
-            pop = 1'b0;
-            push = 1'b0;
-            pc_sel = 1'b0;
-            ei_set = 1'b0;
-            di_clear = 1'b0;
-        end
-        3'b110,3'b010,3'b111: // SLT, SGT, SETE, bring out cmp flag for further purposes
-        begin
-            alu_src = 1'b0;
-            reg_wrt = 1'b1;
-            mem_read = 1'b0;
-            mem_write = 1'b0;
-            memtoreg = 1'b1;
-            is_bnez = 1'b0;
-            alu_op = 2'b00;
-            branch = 1'b0;   
-            immtype = 3'b111;
-            PCsel = 2'b00;
-            pop = 1'b0;
-            push = 1'b0;
-            pc_sel = 1'b0;
-            ei_set = 1'b0;
-            di_clear = 1'b0;
-        end
-        endcase
+    4'b0000:  // ALU0
+    begin 
+        alu_src = 1'b0;
+        reg_wrt = 1'b1;
+        mem_read = 1'b0;
+        mem_write = 1'b0;
+        memtoreg = 1'b1;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;   
+        immtype = 3'b000;       //Undefined
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
+        ei_set = 1'b0;
+        di_clear = 1'b0;
     end
-    4'b0001,4'b0010,4'b0100,4'b0101,4'b0110:  // I-type
+    4'b0001:    // ALU1
+    begin
+        alu_src = 1'b0;
+        reg_wrt = 1'b1;
+        mem_read = 1'b0;
+        mem_write = 1'b0;
+        memtoreg = 1'b1;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;   
+        immtype = 3'b000;       //Undefined
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
+        ei_set = 1'b0;
+        di_clear = 1'b0;
+    end
+    4'b0010:    // SFT
+    begin
+        alu_src = 1'b0;
+        reg_wrt = 1'b1;
+        mem_read = 1'b0;
+        mem_write = 1'b0;
+        memtoreg = 1'b1;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;   
+        immtype = 3'b000;       //Undefined
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
+        ei_set = 1'b0;
+        di_clear = 1'b0;
+    end
+    4'b0011:    // ADDI
     begin
         alu_src = 1'b1;
         reg_wrt = 1'b1;
@@ -88,7 +101,7 @@ begin
         ei_set = 1'b0;
         di_clear = 1'b0;
     end
-    4'b0011,4'b1111: // LSLR, LSRI
+    4'b0100:    // SLTI
     begin
         alu_src = 1'b1;
         reg_wrt = 1'b1;
@@ -96,7 +109,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b1;
         is_bnez = 1'b0;
-        alu_op = 2'b01;
+        alu_op = 2'b00;
         branch = 1'b0;   
         immtype = 3'b000;
         PCsel = 2'b00;
@@ -106,68 +119,14 @@ begin
         ei_set = 1'b0;
         di_clear = 1'b0;
     end
-    4'b0111:  // LD
-    begin
-        alu_src = 1'b1;
-        reg_wrt = 1'b1;
-        mem_read = 1'b1;
-        mem_write = 1'b0;
-        memtoreg = 1'b0;
-        is_bnez = 1'b0;
-        alu_op = 2'b00;
-        branch = 1'b0;  
-        immtype = 3'b000; 
-        PCsel = 2'b00;
-        pop = 1'b0;
-        push = 1'b0;
-        pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-    end  
-    4'b1000:  // LI
-    begin
-        alu_src = 1'b1;
-        reg_wrt = 1'b1;
-        mem_read = 1'b0;
-        mem_write = 1'b0;
-        memtoreg = 1'b1;
-        is_bnez = 1'b0;
-        alu_op = 2'b00;
-        branch = 1'b0;  
-        immtype = 3'b011; 
-        PCsel = 2'b00;
-        pop = 1'b0;
-        push = 1'b0;
-        pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-    end
-    4'b1001:  // ST
-    begin
-        alu_src = 1'b1;
-        reg_wrt = 1'b0;
-        mem_read = 1'b0;
-        mem_write = 1'b1;
-        memtoreg = 1'b0;
-        is_bnez = 1'b0;
-        alu_op = 2'b00;
-        branch = 1'b0;  
-        immtype = 3'b000; 
-        PCsel = 2'b00;
-        pop = 1'b0;
-        push = 1'b0;
-        pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-    end
-    4'b1010:  // BEQZ
+    4'b0101:  // BNEQ
     begin
         alu_src = 1'b0;
         reg_wrt = 1'b0;
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b0;
-        is_bnez = 1'b1; // BEQZ
+        is_bnez = 1'b1;
         alu_op = 2'b01;
         branch = 1'b1;  
         immtype = 3'b011; 
@@ -178,7 +137,7 @@ begin
         ei_set = 1'b0;
         di_clear = 1'b0;
     end
-    4'b1011:  // BNQZ
+    4'b0110:  // BGTZ
     begin
         alu_src = 1'b0;
         reg_wrt = 1'b0;
@@ -196,7 +155,7 @@ begin
         ei_set = 1'b0;
         di_clear = 1'b0;
     end
-    4'b1100:  // JMP
+    4'b0111:  // JUMP
     begin
         alu_src = 1'b0;
         reg_wrt = 1'b0;
@@ -214,25 +173,43 @@ begin
         ei_set = 1'b0;
         di_clear = 1'b0;
     end
-    4'b1101: 
-    begin // CALL
-        alu_src   = 1'b0;
-        reg_wrt   = 1'b0;
-        mem_read  = 1'b0;
+    4'b1000:  // LH
+    begin
+        alu_src = 1'b1;
+        reg_wrt = 1'b1;
+        mem_read = 1'b1;
         mem_write = 1'b0;
-        memtoreg  = 1'b0;
-        is_bnez   = 1'b1;
-        alu_op    = 2'b00;
-        branch    = 1'b1;
-        immtype   = 3'b001; 
-        PCsel     = 2'b10;
-        pop       = 1'b0;
-        push      = 1'b1;
-        pc_sel    = 1'b1;
+        memtoreg = 1'b0;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;  
+        immtype = 3'b000; 
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
     end
-    4'b1110: 
+    4'b1001:  // SH
+    begin
+        alu_src = 1'b1;
+        reg_wrt = 1'b0;
+        mem_read = 1'b0;
+        mem_write = 1'b1;
+        memtoreg = 1'b0;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;  
+        immtype = 3'b000; 
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
+        ei_set = 1'b0;
+        di_clear = 1'b0;
+    end
+    4'b1110: // SYSTEM
     begin
         case(funct3)
         3'b001:
@@ -302,6 +279,23 @@ begin
             pc_sel = 1'b0; 
             ei_set = 1'b0;
             di_clear = 1'b1;
+        end
+        3'b100: begin // CALL
+            alu_src   = 1'b0;
+            reg_wrt   = 1'b0;
+            mem_read  = 1'b0;
+            mem_write = 1'b0;
+            memtoreg  = 1'b0;
+            is_bnez   = 1'b1;
+            alu_op    = 2'b00;
+            branch    = 1'b1;
+            immtype   = 3'b001; 
+            PCsel     = 2'b10;
+            pop       = 1'b0;
+            push      = 1'b1;
+            pc_sel    = 1'b1;
+            ei_set = 1'b0;
+            di_clear = 1'b0;
         end
     endcase
     end
