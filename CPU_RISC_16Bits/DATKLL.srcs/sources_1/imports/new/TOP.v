@@ -30,9 +30,10 @@ wire is_bnez, mem_read_en, branch_out;
 wire /*clk_1hz ,clk_4hz,clk_100hz,*/ clk_8hz;
 wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
 wire zero, mux_pc_sel, branch, ei_set, di_clear, memtoreg;
-wire [1:0] alu_op, PCsel;
+wire [1:0] alu_op, PCsel, cmp;
 wire [2:0] rs1, rs2, rd, funct3, immtype;
-wire [3:0] opcode, alu_sel;
+wire [3:0] opcode/*, alu_sel*/;
+wire [4:0] alu_sel, ALU_control;
 wire [15:0] in_mux, instruction;
 wire [15:0] pc_in, muxicr_in;
 wire [15:0] ALU_out, imm_out, outmux, read_data;
@@ -47,7 +48,7 @@ reg_file ic2 (.reg_wrt(reg_wrt),.rs1(rs1),.rs2(rs2),.rd(rd),.readA_out(readA_out
 
 MUX_alu_2_1 ic3 (.B(readB_out),.imm(imm_out),.alu_src(alu_src),.outmux(outmux));
 
-ALU ic4 (.A(readA_out),.B(outmux),.alu_sel(alu_sel),.ALU_out(ALU_out),.zero(zero));
+ALU ic4 (.A(readA_out),.B(outmux),.alu_sel(alu_sel),.ALU_out(ALU_out),.cmp(cmp));
 
 ALU_control ic5 (.funct3(funct3),.alu_op(alu_op),.ALU_control(alu_sel));
 
