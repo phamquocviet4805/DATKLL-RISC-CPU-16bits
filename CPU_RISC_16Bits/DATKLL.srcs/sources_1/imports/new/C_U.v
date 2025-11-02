@@ -46,7 +46,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0001:    // ALU1
     begin
@@ -65,7 +65,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0010:    // SFT
     begin
@@ -84,7 +84,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0011:    // ADDI
     begin
@@ -103,7 +103,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0100:    // SLTI
     begin
@@ -122,7 +122,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0101:  // BNEQ
     begin
@@ -141,7 +141,7 @@ begin
         pc_sel = 1'b1;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0110:  // BGTZ
     begin
@@ -160,7 +160,7 @@ begin
         pc_sel = 1'b1;
         ei_set = 1'b0;
         di_clear = 1'b0;
-        bank_sel = 2'b00
+        bank_sel = 2'b00;
     end
     4'b0111:  // JUMP
     begin
