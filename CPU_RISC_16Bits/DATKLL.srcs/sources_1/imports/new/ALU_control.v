@@ -77,7 +77,7 @@ module ALU_control(
             7'b1000_000: ALU_control = 6'b011011;    // lh - sh
             
             //MFSR - MTSR
-            7'b1001_000: ALU_control = 6'b011100;    
+            7'b1001_000: ALU_control = 6'b000000;    //ADDU
             
 
             default:   ALU_control = 6'b000000;  // Defautl: ADDU
