@@ -39,7 +39,7 @@ begin
         is_bnez = 1'b0;
         alu_op = 2'b00;
         branch = 1'b0;   
-        immtype = 3'b000;       //Undefined
+        immtype = 3'b000;       
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
@@ -57,7 +57,7 @@ begin
         is_bnez = 1'b0;
         alu_op = 2'b00;
         branch = 1'b0;   
-        immtype = 3'b000;       //Undefined
+        immtype = 3'b000;   
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
@@ -75,7 +75,7 @@ begin
         is_bnez = 1'b0;
         alu_op = 2'b00;
         branch = 1'b0;   
-        immtype = 3'b000;       //Undefined
+        immtype = 3'b000;    
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
@@ -93,7 +93,7 @@ begin
         is_bnez = 1'b0;
         alu_op = 2'b00;
         branch = 1'b0;   
-        immtype = 3'b000;
+        immtype = 3'b001;
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
@@ -129,7 +129,7 @@ begin
         is_bnez = 1'b1;
         alu_op = 2'b01;
         branch = 1'b1;  
-        immtype = 3'b011; 
+        immtype = 3'b000; 
         PCsel = 2'b10;
         pop = 1'b0;
         push = 1'b0;

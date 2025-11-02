@@ -32,7 +32,8 @@ wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
 wire zero, mux_pc_sel, branch, ei_set, di_clear, memtoreg;
 wire [1:0] alu_op, PCsel;
 wire [2:0] rs1, rs2, rd, funct3, immtype;
-wire [3:0] opcode, alu_sel;
+wire [3:0] opcode;
+wire [4:0] alu_sel, ALU_control;
 wire [15:0] in_mux, instruction;
 wire [15:0] pc_in, muxicr_in;
 wire [15:0] ALU_out, imm_out, outmux, read_data;
@@ -64,9 +65,9 @@ pc_add_2 ic10 (.pc(address),.imm(CONST),.pc_out(in_mux));
 
 program_counter ic11 (.clk(clk_out),.reset(reset),.pc_in(pc_in),.pc_out(address),.pc_sel(pc_sel),.icr_sel(icr_sel));
 
-MUX_2_1_PC ic12 (.B(in_mux),.imm(pc_out),.alu_src(branch & branch_out),.outmux(pc_mux));
+MUX_2_1_PC ic12 (.B(in_mux),.imm(pc_out),.alu_src(alu_src),.outmux(pc_mux));
 
-branch ic14 (.zero(zero),.is_bnez(is_bnez),.branch_out(branch_out));
+branch ic14 (.cmp(cmp),.branch(branch),.branch_out(branch_out));
 
 MUX_3_1_RET ic16 (.A(in_mux),.B(ret_addr),.C(pc_mux),.PC_sel(PCsel),.outmux(muxicr_in));
 
