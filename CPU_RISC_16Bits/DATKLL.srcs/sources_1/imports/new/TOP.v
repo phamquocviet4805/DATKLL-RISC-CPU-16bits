@@ -30,7 +30,7 @@ wire is_bnez, mem_read_en, branch_out;
 wire /*clk_1hz ,clk_4hz,clk_100hz,*/ clk_8hz;
 wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
 wire zero, mux_pc_sel, branch, ei_set, di_clear, memtoreg;
-wire [1:0] alu_op, PCsel;
+wire [1:0] alu_op, PCsel , bank_sel;
 wire [2:0] rs1, rs2, rd, funct3, immtype;
 wire [3:0] opcode;
 wire [4:0] alu_sel, ALU_control;
@@ -44,7 +44,7 @@ wire interrupt_rise;
 
 Ins_Mem ic1 (.address(address),.opcode(opcode),.rd(rd),.rs1(rs1),.rs2(rs2),.funct3(funct3),.instruction(instruction));
 
-reg_file ic2 (.reg_wrt(reg_wrt),.rs1(rs1),.rs2(rs2),.rd(rd),.readA_out(readA_out),.readB_out(readB_out),.data(data_reg),.r3(r3),.clk(clk_out));
+reg_file ic2 (.reg_wrt(reg_wrt),.rs1(rs1),.rs2(rs2),.rd(rd),.readA_out(readA_out),.readB_out(readB_out),.data(data_reg),.r3(r3),.clk(clk_out),.bank_sel(bank_sel));
 
 MUX_alu_2_1 ic3 (.B(readB_out),.imm(imm_out),.alu_src(alu_src),.outmux(outmux));
 
@@ -72,7 +72,7 @@ branch ic14 (.cmp(cmp),.branch(branch),.branch_out(branch_out));
 MUX_3_1_RET ic16 (.A(in_mux),.B(ret_addr),.C(pc_mux),.PC_sel(PCsel),.outmux(muxicr_in));
 
 C_U ic17 (.opcode(opcode),.funct3(funct3),.mem_read(mem_read_en),.reg_wrt(reg_wrt),.is_bnez(is_bnez),.alu_src(alu_src),.pc_sel(pc_sel),.
-mem_write(mem_write_en),.branch(branch),.push(push),.pop(pop),.alu_op(alu_op),.memtoreg(memtoreg),.PCsel(PCsel),.immtype(immtype),.ei_set(ei_set),.di_clear(di_clear));
+mem_write(mem_write_en),.branch(branch),.push(push),.pop(pop),.alu_op(alu_op),.memtoreg(memtoreg),.PCsel(PCsel),.immtype(immtype),.ei_set(ei_set),.di_clear(di_clear),.bank_sel(bank_sel));
 
 Clock_div ic18 (.clk(clk),.rst(reset)/*,.clk_1hz(clk_1hz),.clk_4hz(clk_4hz)*/,.clk_8hz(clk_8hz)/*,.clk_100hz(clk_100hz)*/);
 

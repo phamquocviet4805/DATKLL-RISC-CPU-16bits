@@ -56,10 +56,14 @@ module ALU_control(
             5'b10_001: ALU_control = 5'b10001;  // SHL
             5'b10_010: ALU_control = 5'b10010;  // ROR
             5'b10_011: ALU_control = 5'b10011;  // ROL
-//            5'b10_100: ALU_control = 5'10100;  // SHR
-//            5'b10_101: ALU_control = 5'10101;  // SHL
-//            5'b10_110: ALU_control = 5'b10110;  // ROR
-//            5'b10_111: ALU_control = 5'b10111;  // ROL
+//            5'b10_100: ALU_control = 5'10100;  
+//            5'b10_101: ALU_control = 5'10101;  
+//            5'b10_110: ALU_control = 5'b10110;  
+//            5'b10_111: ALU_control = 5'b10111;  
+
+            //Immidiate
+            5'b10_000: ALU_control = 5'b10000;  // SHR
+            5'b10_001: ALU_control = 5'b10001;  // SHL
 
             //Branch Compare
             5'b11_000: ALU_control = 5'b10100;  // BNEQ

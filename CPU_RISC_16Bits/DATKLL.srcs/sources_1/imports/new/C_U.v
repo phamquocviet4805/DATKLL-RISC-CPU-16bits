@@ -23,7 +23,7 @@
 module C_U( 
     input [3:0] opcode, input[2:0] funct3,
     output reg mem_read,memtoreg, reg_wrt, is_bnez, alu_src, mem_write, pc_sel, ei_set, di_clear, branch, push, pop,
-    output reg [1:0] alu_op, PCsel, 
+    output reg [1:0] alu_op, PCsel, bank_sel,
     output reg[2:0] immtype
 );
 always @(*)
@@ -46,6 +46,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0001:    // ALU1
     begin
@@ -64,6 +65,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0010:    // SFT
     begin
@@ -82,6 +84,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0011:    // ADDI
     begin
@@ -100,6 +103,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0100:    // SLTI
     begin
@@ -118,6 +122,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0101:  // BNEQ
     begin
@@ -136,6 +141,7 @@ begin
         pc_sel = 1'b1;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0110:  // BGTZ
     begin
@@ -154,6 +160,7 @@ begin
         pc_sel = 1'b1;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00
     end
     4'b0111:  // JUMP
     begin
@@ -172,6 +179,7 @@ begin
         pc_sel = 1'b1;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00;
     end
     4'b1000:  // LH
     begin
@@ -190,6 +198,7 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00;
     end
     4'b1001:  // SH
     begin
@@ -208,9 +217,49 @@ begin
         pc_sel = 1'b0;
         ei_set = 1'b0;
         di_clear = 1'b0;
+        bank_sel = 2'b00;
     end
+    4'b1010: // MFSR
+    begin
+        alu_src = 1'b1;
+        reg_wrt = 1'b0;
+        mem_read = 1'b0;
+        mem_write = 1'b1;
+        memtoreg = 1'b0;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;  
+        immtype = 3'b000; 
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
+        ei_set = 1'b0;
+        di_clear = 1'b0;
+        bank_sel = 2'b01;
+    end 
+        4'b1010: // MTSR
+    begin
+        alu_src = 1'b1;
+        reg_wrt = 1'b0;
+        mem_read = 1'b0;
+        mem_write = 1'b1;
+        memtoreg = 1'b0;
+        is_bnez = 1'b0;
+        alu_op = 2'b00;
+        branch = 1'b0;  
+        immtype = 3'b000; 
+        PCsel = 2'b00;
+        pop = 1'b0;
+        push = 1'b0;
+        pc_sel = 1'b0;
+        ei_set = 1'b0;
+        di_clear = 1'b0;
+        bank_sel = 2'b10;
+    end 
     4'b1110: // SYSTEM
     begin
+        bank_sel = 2'b00;
         case(funct3)
         3'b001:
             begin // RET
