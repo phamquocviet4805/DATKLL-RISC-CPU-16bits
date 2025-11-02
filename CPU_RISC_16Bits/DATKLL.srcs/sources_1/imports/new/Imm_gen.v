@@ -24,6 +24,6 @@ module Imm_gen( input [15:0] instruction, input [2:0] imm_type, output [15:0] im
     assign imm_out = (imm_type ==3'b000)? 
     {{10{instruction[5]}}, instruction[5:0]}:    //I-type
     (imm_type ==3'b001)?
-    {{3{instruction[11]}}, instruction[11:0], 1'b0}:   //J-type
+    {{3{1'b0}}, instruction[11:0], 1'b0}:   //J-type
     (instruction[5:0]);
 endmodule

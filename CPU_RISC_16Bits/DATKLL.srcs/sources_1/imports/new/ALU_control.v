@@ -21,55 +21,66 @@
 
 
 module ALU_control(
-    input [1:0] alu_op,        // Control Unit
+    input [3:0] alu_op,        // Control Unit
     input [2:0] funct3,        // instruction
-    output reg [4:0] ALU_control   // ALU
+    output reg [5:0] ALU_control   // ALU
 );
 
-    wire [4:0] control_sig;
+    wire [6:0] control_sig;
     assign control_sig = {alu_op, funct3};
 
     always @(*) begin
         case (control_sig)
             //ALU0: Unsigned
-            5'b00_000: ALU_control = 5'b00000;  // ADDU
-            5'b00_001: ALU_control = 5'b00001;  // SUBU
-            5'b00_010: ALU_control = 5'b00010;  // MULTU
-            5'b00_011: ALU_control = 5'b00011;  // DIVU
-            5'b00_100: ALU_control = 5'b00100;  // AND
-            5'b00_101: ALU_control = 5'b00101;  // OR
-            5'b00_110: ALU_control = 5'b00110;  // NOR
-            5'b00_111: ALU_control = 5'b00111;  // XOR
-
+            7'b0000_000: ALU_control = 6'b000000;  // ADDU
+            7'b0000_001: ALU_control = 6'b000001;  // SUBU
+            7'b0000_010: ALU_control = 6'b000010;  // MULTU
+            7'b0000_011: ALU_control = 6'b000011;  // DIVU
+            7'b0000_100: ALU_control = 6'b000100;  // AND
+            7'b0000_101: ALU_control = 6'b000101;  // OR
+            7'b0000_110: ALU_control = 6'b000110;  // NOR
+            7'b0000_111: ALU_control = 6'b000111;  // XOR
+            
             //ALU1: Signed
-            5'b01_000: ALU_control = 5'b01000;  // ADD
-            5'b01_001: ALU_control = 5'b01001;  // SUB
-            5'b01_010: ALU_control = 5'b01010;  // MULT
-            5'b01_011: ALU_control = 5'b01011;  // DIV
-            5'b01_100: ALU_control = 5'b01100;  // SLT
-            5'b01_101: ALU_control = 5'b01101;  // SEQ
-            5'b01_110: ALU_control = 5'b01110;  // SLTU
-            5'b01_111: ALU_control = 5'b01111;  // JR
+            7'b0001_000: ALU_control = 6'b001000;  // ADD
+            7'b0001_001: ALU_control = 6'b001001;  // SUB
+            7'b0001_010: ALU_control = 6'b001010;  // MULT
+            7'b0001_011: ALU_control = 6'b001011;  // DIV
+            7'b0001_100: ALU_control = 6'b001100;  // SLT
+            7'b0001_101: ALU_control = 6'b001101;  // SEQ
+            7'b0001_110: ALU_control = 6'b001110;  // SLTU
+            7'b0001_111: ALU_control = 6'b001111;  // JR
 
             //Shift / Rotate
-            5'b10_000: ALU_control = 5'b10000;  // SHR
-            5'b10_001: ALU_control = 5'b10001;  // SHL
-            5'b10_010: ALU_control = 5'b10010;  // ROR
-            5'b10_011: ALU_control = 5'b10011;  // ROL
-//            5'b10_100: ALU_control = 5'10100;  
-//            5'b10_101: ALU_control = 5'10101;  
-//            5'b10_110: ALU_control = 5'b10110;  
-//            5'b10_111: ALU_control = 5'b10111;  
+            7'b0010_000: ALU_control = 6'b010000;  // SHR
+            7'b0010_001: ALU_control = 6'b010001;  // SHL
+            7'b0010_010: ALU_control = 6'b010010;  // ROR
+            7'b0010_011: ALU_control = 6'b010011;  // ROL
+//            7'b0010_100: ALU_control = 6'b010100;  
+//            7'b0010_101: ALU_control = 6'b010101;  
+//            7'b0010_110: ALU_control = 6'b010110;  
+//            7'b0010_111: ALU_control = 6'b010111;  
 
             //Immidiate
-            5'b10_000: ALU_control = 5'b10000;  // SHR
-            5'b10_001: ALU_control = 5'b10001;  // SHL
+            7'b0011_000: ALU_control = 6'b001000;  // ADDI
 
+            7'b0100_000: ALU_control = 6'b001100;  // SLTI
+            
             //Branch Compare
-            5'b11_000: ALU_control = 5'b10100;  // BNEQ
-            5'b11_001: ALU_control = 5'b10101;  // GT
+            7'b0101_000: ALU_control = 6'b011000;  // BNEQ
+            7'b0110_000: ALU_control = 6'b011001;  // BGTZ
+            
+            //Jump
+            7'b0111_000: ALU_control = 6'b011010;    // jump
+            
+            //Memory
+            7'b1000_000: ALU_control = 6'b011011;    // lh - sh
+            
+            //MFSR - MTSR
+            7'b1001_000: ALU_control = 6'b011100;    
+            
 
-            default:   ALU_control = 5'b00000;  // Defautl: ADDU
+            default:   ALU_control = 6'b000000;  // Defautl: ADDU
         endcase
     end
 endmodule

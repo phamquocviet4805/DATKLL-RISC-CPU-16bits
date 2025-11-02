@@ -21,10 +21,11 @@
 
 
 module C_U( 
-    input [3:0] opcode, input[2:0] funct3,
+    input [3:0] opcode, input [2:0] funct3,
     output reg mem_read,memtoreg, reg_wrt, is_bnez, alu_src, mem_write, pc_sel, ei_set, di_clear, branch, push, pop,
-    output reg [1:0] alu_op, PCsel, bank_sel,
-    output reg[2:0] immtype
+    output reg [1:0] PCsel, bank_sel,
+    output reg [2:0] immtype, 
+    output reg [3:0] alu_op
 );
 always @(*)
 begin
@@ -37,7 +38,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b1;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b000;
         branch = 1'b0;   
         immtype = 3'b000;       
         PCsel = 2'b00;
@@ -56,7 +57,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b1;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b001;
         branch = 1'b0;   
         immtype = 3'b000;   
         PCsel = 2'b00;
@@ -75,7 +76,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b1;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b010;
         branch = 1'b0;   
         immtype = 3'b000;    
         PCsel = 2'b00;
@@ -94,7 +95,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b1;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b011;
         branch = 1'b0;   
         immtype = 3'b001;
         PCsel = 2'b00;
@@ -113,7 +114,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b1;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b011;
         branch = 1'b0;   
         immtype = 3'b000;
         PCsel = 2'b00;
@@ -132,7 +133,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b0;
         is_bnez = 1'b1;
-        alu_op = 2'b01;
+        alu_op = 3'b100;
         branch = 1'b1;  
         immtype = 3'b000; 
         PCsel = 2'b10;
@@ -151,7 +152,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b0;
         is_bnez = 1'b1; 
-        alu_op = 2'b01;
+        alu_op = 3'b100;
         branch = 1'b1;  
         immtype = 3'b011; 
         PCsel = 2'b10;
@@ -170,7 +171,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b0;
         is_bnez = 1'b1;
-        alu_op = 2'b00;
+        alu_op = 3'b101;
         branch = 1'b1;  
         immtype = 3'b001; 
         PCsel = 2'b10;
@@ -189,7 +190,7 @@ begin
         mem_write = 1'b0;
         memtoreg = 1'b0;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b110;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
@@ -208,7 +209,7 @@ begin
         mem_write = 1'b1;
         memtoreg = 1'b0;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b110;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
@@ -227,7 +228,7 @@ begin
         mem_write = 1'b1;
         memtoreg = 1'b0;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b111;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
@@ -246,7 +247,7 @@ begin
         mem_write = 1'b1;
         memtoreg = 1'b0;
         is_bnez = 1'b0;
-        alu_op = 2'b00;
+        alu_op = 3'b111;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
@@ -260,6 +261,7 @@ begin
     4'b1110: // SYSTEM
     begin
         bank_sel = 2'b00;
+        alu_op = 3'b000;
         case(funct3)
         3'b001:
             begin // RET
@@ -269,7 +271,6 @@ begin
             mem_write = 1'b0;
             memtoreg = 1'b0;
             is_bnez = 1'b0;
-            alu_op = 2'b00;
             branch = 1'b1;  
             immtype = 3'b111; 
             PCsel = 2'b01;
@@ -286,7 +287,6 @@ begin
             mem_write = 1'b0;
             memtoreg = 1'b0;
             is_bnez = 1'b0;
-            alu_op = 2'b00;
             branch = 1'b0; 
             immtype = 3'b111; 
             PCsel = 2'b00;
@@ -302,7 +302,6 @@ begin
             mem_write = 1'b0;
             memtoreg = 1'b0;
             is_bnez = 1'b0;
-            alu_op = 2'b00;
             branch = 1'b0; 
             immtype = 3'b111; 
             PCsel = 2'b00;
@@ -319,7 +318,6 @@ begin
             mem_write = 1'b0;
             memtoreg = 1'b0;
             is_bnez = 1'b0;
-            alu_op = 2'b00;
             branch = 1'b0; 
             immtype = 3'b111; 
             PCsel = 2'b00;
@@ -336,7 +334,6 @@ begin
             mem_write = 1'b0;
             memtoreg  = 1'b0;
             is_bnez   = 1'b1;
-            alu_op    = 2'b00;
             branch    = 1'b1;
             immtype   = 3'b001; 
             PCsel     = 2'b10;
