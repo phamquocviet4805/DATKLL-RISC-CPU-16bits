@@ -90,6 +90,8 @@ always @(*) begin
         6'b011000: cmp = (A == B) ? 2'b00 : 2'b01;                       // Not Equal
         6'b011001: cmp = (A > B)  ? 2'b01 : 2'b00;                       // Greater than
 
+        //Memory instruction
+        6'b011011: ALU_out = (A & 16'hFFFE) + (B << 1);                  //lh - sh
 
         default: begin
             ALU_out = A | B; 
