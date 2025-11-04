@@ -22,19 +22,16 @@
 
 // REGISTER FILE
 
-module reg_file(rs1,rs2,rd,data,reg_wrt,readA_out,readB_out,r3,clk,bank_sel);
-input reg_wrt,clk;
-input [1:0] bank_sel;
-input [2:0]rs1,rs2,rd;
-input [15:0]data;
-output [15:0]readA_out,readB_out;
-output [15:0] r3;
+module reg_file(
+    input reg_wrt, clk,
+    input [2:0] rs, rt, rd,
+    input [15:0] data,
+    output [15:0] readA_out, readB_out,
+    output [15:0] r3
+);
 
-wire [3:0] rs1_ext = (bank_sel == 2'b01) ? {1'b1, rs1} : {1'b0, rs1};
-wire [3:0] rs2_ext = (bank_sel == 2'b01) ? {1'b1, rs2} : {1'b0, rs2};
-wire [3:0] rd_ext  = (bank_sel == 2'b10) ? {1'b1, rd} : {1'b0, rd};
-reg [15:0] x [0:15];
-integer i;
+reg [15:0] x [0:7];
+
 initial begin
     x[0]=0;    
     x[1]=0;    
@@ -44,22 +41,19 @@ initial begin
     x[5]=0;     
     x[6]=0;    
     x[7]=0;    
-    x[8]=0;     // R0 contains zero
-    x[9]=0;     // Stack pointer 
-    x[10]=0;    // Return address
-    x[11]=0;    // Function argument/ result
-    x[12]=0;    // Propram counter
-    x[13]=0;    // Assembler Temporary
-    x[14]=0;    // HI
-    x[15]=0;    // LO
 end
+
+//wire [3:0] rs_ext = x[rs];
+//wire [3:0] rt_ext =  x[rt];
+//wire [3:0] rd_ext =  x[rd];
 
 always @(posedge clk)
 begin
-    if(reg_wrt==1)
-        x[rd_ext]<=data;
+    if (reg_wrt==1)
+        x[rd] <= data;
 end
-assign readA_out = x[rs1_ext];
-assign readB_out = x[rs2_ext];
-assign r3 = x[11];
+
+assign readA_out = x[rs];
+assign readB_out = x[rt];
+
 endmodule

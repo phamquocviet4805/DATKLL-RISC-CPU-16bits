@@ -22,8 +22,8 @@
 
 module C_U( 
     input [3:0] opcode, input [2:0] funct3,
-    output reg mem_read,memtoreg, reg_wrt, is_bnez, alu_src, mem_write, pc_sel, ei_set, di_clear, branch, push, pop,
-    output reg [1:0] PCsel, bank_sel,
+    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, pc_sel, branch, push, pop, reg_dst,
+    output reg [1:0] PCsel,
     output reg [2:0] immtype, 
     output reg [3:0] alu_op
 );
@@ -37,17 +37,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b1;
-        is_bnez = 1'b0;
-        alu_op = 3'b000;
+        alu_op = 4'b0000;
         branch = 1'b0;   
         immtype = 3'b000;       
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0001:    // ALU1
     begin
@@ -56,17 +52,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b1;
-        is_bnez = 1'b0;
-        alu_op = 3'b001;
+        alu_op = 4'b0001;
         branch = 1'b0;   
         immtype = 3'b000;   
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0010:    // SFT
     begin
@@ -75,17 +67,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b1;
-        is_bnez = 1'b0;
-        alu_op = 3'b010;
+        alu_op = 4'b0010;
         branch = 1'b0;   
         immtype = 3'b000;    
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0011:    // ADDI
     begin
@@ -94,17 +82,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b1;
-        is_bnez = 1'b0;
-        alu_op = 3'b011;
+        alu_op = 4'b0011;
         branch = 1'b0;   
         immtype = 3'b001;
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0100:    // SLTI
     begin
@@ -113,17 +97,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b1;
-        is_bnez = 1'b0;
-        alu_op = 3'b011;
+        alu_op = 4'b0100;
         branch = 1'b0;   
         immtype = 3'b000;
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0101:  // BNEQ
     begin
@@ -132,17 +112,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b0;
-        is_bnez = 1'b1;
-        alu_op = 3'b100;
+        alu_op = 4'b0101;
         branch = 1'b1;  
         immtype = 3'b000; 
         PCsel = 2'b10;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b1;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0110:  // BGTZ
     begin
@@ -151,17 +127,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b0;
-        is_bnez = 1'b1; 
-        alu_op = 3'b100;
+        alu_op = 4'b0110;
         branch = 1'b1;  
         immtype = 3'b011; 
         PCsel = 2'b10;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b1;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b0111:  // JUMP
     begin
@@ -170,17 +142,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b0;
         memtoreg = 1'b0;
-        is_bnez = 1'b1;
-        alu_op = 3'b101;
+        alu_op = 4'b0111;
         branch = 1'b1;  
         immtype = 3'b001; 
         PCsel = 2'b10;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b1;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b1000:  // LH
     begin
@@ -189,17 +157,13 @@ begin
         mem_read = 1'b1;
         mem_write = 1'b0;
         memtoreg = 1'b0;
-        is_bnez = 1'b0;
-        alu_op = 3'b110;
+        alu_op = 4'b1000;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b1001:  // SH
     begin
@@ -208,17 +172,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b1;
         memtoreg = 1'b0;
-        is_bnez = 1'b0;
-        alu_op = 3'b110;
+        alu_op = 4'b1000;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
-        bank_sel = 2'b00;
     end
     4'b1010: // MFSR
     begin
@@ -227,16 +187,13 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b1;
         memtoreg = 1'b0;
-        is_bnez = 1'b0;
-        alu_op = 3'b111;
+        alu_op = 4'b1001;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
         bank_sel = 2'b01;
     end 
         4'b1010: // MTSR
@@ -246,105 +203,15 @@ begin
         mem_read = 1'b0;
         mem_write = 1'b1;
         memtoreg = 1'b0;
-        is_bnez = 1'b0;
-        alu_op = 3'b111;
+        alu_op = 4'b1001;
         branch = 1'b0;  
         immtype = 3'b000; 
         PCsel = 2'b00;
         pop = 1'b0;
         push = 1'b0;
         pc_sel = 1'b0;
-        ei_set = 1'b0;
-        di_clear = 1'b0;
         bank_sel = 2'b10;
     end 
-    4'b1110: // SYSTEM
-    begin
-        bank_sel = 2'b00;
-        alu_op = 3'b000;
-        case(funct3)
-        3'b001:
-            begin // RET
-            alu_src = 1'b0;
-            reg_wrt = 1'b0;
-            mem_read = 1'b0;
-            mem_write = 1'b0;
-            memtoreg = 1'b0;
-            is_bnez = 1'b0;
-            branch = 1'b1;  
-            immtype = 3'b111; 
-            PCsel = 2'b01;
-            pop = 1'b1;
-            push = 1'b0;
-            pc_sel = 1'b1;
-            ei_set = 1'b0;
-            di_clear = 1'b0;
-        end
-        3'b000: begin // NOP
-            alu_src = 1'b0;
-            reg_wrt = 1'b0;
-            mem_read = 1'b0;
-            mem_write = 1'b0;
-            memtoreg = 1'b0;
-            is_bnez = 1'b0;
-            branch = 1'b0; 
-            immtype = 3'b111; 
-            PCsel = 2'b00;
-            pop = 1'b0;
-            push = 1'b0;
-            ei_set = 1'b0;
-            di_clear = 1'b0;
-        end
-        3'b010: begin // EI
-            alu_src = 1'b0;
-            reg_wrt = 1'b0;
-            mem_read = 1'b0;
-            mem_write = 1'b0;
-            memtoreg = 1'b0;
-            is_bnez = 1'b0;
-            branch = 1'b0; 
-            immtype = 3'b111; 
-            PCsel = 2'b00;
-            pop = 1'b0;
-            push = 1'b0;
-            pc_sel = 1'b0; 
-            ei_set = 1'b1;
-            di_clear = 1'b0;
-        end
-        3'b011: begin // DI
-            alu_src = 1'b0;
-            reg_wrt = 1'b0;
-            mem_read = 1'b0;
-            mem_write = 1'b0;
-            memtoreg = 1'b0;
-            is_bnez = 1'b0;
-            branch = 1'b0; 
-            immtype = 3'b111; 
-            PCsel = 2'b00;
-            pop = 1'b0;
-            push = 1'b0;
-            pc_sel = 1'b0; 
-            ei_set = 1'b0;
-            di_clear = 1'b1;
-        end
-        3'b100: begin // CALL
-            alu_src   = 1'b0;
-            reg_wrt   = 1'b0;
-            mem_read  = 1'b0;
-            mem_write = 1'b0;
-            memtoreg  = 1'b0;
-            is_bnez   = 1'b1;
-            branch    = 1'b1;
-            immtype   = 3'b001; 
-            PCsel     = 2'b10;
-            pop       = 1'b0;
-            push      = 1'b1;
-            pc_sel    = 1'b1;
-            ei_set = 1'b0;
-            di_clear = 1'b0;
-        end
     endcase
-    end
-endcase
 end
 endmodule

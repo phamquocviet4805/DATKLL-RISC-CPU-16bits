@@ -21,7 +21,7 @@
 
 
 module branch(
-    input [1:0] cmp, branch, output branch_out
+    input cmp, branch, output branch_out
     );
-assign branch_out = (cmp == 2'b01 && branch == 1) ? 1'b1 : 1'b0; 
+assign branch_out = (cmp == 1'b1 && branch == 1) ? 1'b1 : 1'b0; 
 endmodule

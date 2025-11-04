@@ -20,10 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Imm_gen( input [15:0] instruction, input [2:0] imm_type, output [15:0] imm_out );
-    assign imm_out = (imm_type ==3'b000)? 
-    {{10{instruction[5]}}, instruction[5:0]}:    //I-type
-    (imm_type ==3'b001)?
-    {{3{1'b0}}, instruction[11:0], 1'b0}:   //J-type
-    (instruction[5:0]);
+module Imm_gen( 
+    input [15:0] instruction, 
+    input [2:0] imm_type, 
+    output [15:0] imm_out 
+);
+assign imm_out =    (imm_type ==3'b000)? {{10{instruction[5]}}, instruction[5:0]}: //I-type signed
+                    {{3{1'b0}}, instruction[11:0], 1'b0};   // Other type imm_out = imm_extended * 2
+          
 endmodule

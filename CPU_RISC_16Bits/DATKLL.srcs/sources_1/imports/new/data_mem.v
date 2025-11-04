@@ -23,7 +23,7 @@
 module data_mem(                       
     input mem_write_en, clk,
     input mem_read_en,  
-    input reset, icr_sel,        
+    input reset,       
     input [15:0] addr,           
     input [15:0] write_data,  
     input [15:0] sp_addr,                   // value from PC
@@ -34,24 +34,11 @@ module data_mem(
     output [15:0] read_data
 );
 wire [15:0] ret_addr_plus_2;
-//reg [15:0] sp;
+
 reg [15:0] sp;
-//reg [7:0] memory [0:65534];  
-reg [7:0] memory [0:4094];                  // 4Kb
-//reg [7:0] memory [0:1023];
-//reg [15:0] save1_reg;
-//integer f;
-//integer i;
+reg [7:0] memory [0:4094]; // 4Kb
 initial begin
 sp = 16'hFFFE;
-//$readmemb("test.data", memory);
-//$display("==== Test readmemb data_mem ====");
-//$display("memory[0] = %b", memory[0]);
-//$display("memory[1] = %b", memory[1]);
-//$display("memory[2] = %b", memory[2]);
-//$display("memory[3] = %b", memory[3]);
-//$display("memory[4] = %b", memory[4]);
-//$display("memory[5] = %b", memory[5]);
 end
 
 always @(posedge clk or posedge reset) begin
@@ -60,7 +47,7 @@ always @(posedge clk or posedge reset) begin
         over_flow <= 0;
         under_flow <=0;
     end else
-        if (push || icr_sel) begin //STACK FULL
+        if (push) begin //STACK FULL
             if(sp <= (16'h0FF0 + 1)) begin
                 over_flow <= 1;
                 under_flow <=0;
