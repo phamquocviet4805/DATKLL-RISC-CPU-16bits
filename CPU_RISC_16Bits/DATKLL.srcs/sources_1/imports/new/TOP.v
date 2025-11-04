@@ -29,7 +29,7 @@ localparam CONST = 2;
 wire is_bnez, mem_read_en, branch_out;
 wire /*clk_1hz ,clk_4hz,clk_100hz,*/ clk_8hz;
 wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
-wire mux_pc_sel, branch, memtoreg, reg_dst;
+wire mux_pc_sel, branch, memtoreg, reg_dst, hold_hlt;
 wire cmp;
 wire [1:0] PCsel;
 wire [2:0] rs, rt, rd, rd_raw, funct3, immtype;
@@ -47,8 +47,7 @@ program_counter ic11 (
     .reset(reset),
     .pc_in(pc_mux),
     .pc_out(pc),
-    .pc_sel(pc_sel),
-    .icr_sel(icr_sel));
+    .hold_hlt(hold_hlt));
 
 // ========================= INSTRUCTION MEMOORY =========================
 Ins_Mem ic1 (

@@ -43,10 +43,6 @@ initial begin
     x[7]=0;    
 end
 
-//wire [3:0] rs_ext = x[rs];
-//wire [3:0] rt_ext =  x[rt];
-//wire [3:0] rd_ext =  x[rd];
-
 always @(posedge clk)
 begin
     if (reg_wrt==1)
