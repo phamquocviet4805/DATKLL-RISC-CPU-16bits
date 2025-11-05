@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 07/02/2025 01:40:07 PM
+// Create Date: 11/05/2025 09:31:47 PM
 // Design Name: 
-// Module Name: MUX_2_1_PC
+// Module Name: MUX_jump
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -19,8 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-//branch_mux
-module MUX_2_1_PC( input[15:0] A, B, input mux, output [15:0] outmux );
-    assign outmux = (mux == 0) ? A : B;
-endmodule
 
+module MUX_jump(input [15:0] pc_add_2, [11:0] instruction, jump_signal, [15:0] pc_branch_mux, output [15:0] jump_target);
+    assign jump_target = (jump_signal == 1) ? {pc_add_2[15:13], instruction[11:0], 1'b0}: pc_branch_mux;
+endmodule

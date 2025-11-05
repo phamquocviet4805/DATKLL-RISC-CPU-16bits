@@ -22,7 +22,7 @@
 
 module C_U( 
     input [3:0] opcode, input [2:0] funct3,
-    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, push, pop, reg_dst, hold_hlt,
+    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, push, pop, reg_dst, hold_hlt, jump,
     output reg [2:0] immtype, 
     output reg [3:0] alu_op
 );
@@ -34,6 +34,7 @@ begin
     mem_write = 1'b0;
     memtoreg = 1'b1;
     alu_op = 4'b0000;
+    jump = 1'b0;
     branch = 1'b0;   
     immtype = 3'b000;       
     pop = 1'b0;

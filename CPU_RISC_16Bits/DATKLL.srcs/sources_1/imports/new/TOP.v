@@ -29,7 +29,7 @@ localparam CONST = 2;
 wire is_bnez, mem_read_en, branch_out;
 wire /*clk_1hz ,clk_4hz,clk_100hz,*/ clk_8hz;
 wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
-wire mux_pc_sel, branch, memtoreg, reg_dst, hold_hlt;
+wire mux_pc_sel, branch, memtoreg, reg_dst, hold_hlt, jump;
 wire cmp;
 wire [1:0] PCsel;
 wire [2:0] rs, rt, rd, rd_raw, funct3, immtype;
@@ -39,13 +39,13 @@ wire [15:0] in_mux, instruction;
 wire [15:0] pc_in, muxicr_in;
 wire [15:0] ALU_out, imm_out, outmux, read_data;
 wire [15:0] data_reg, readA_out, readB_out;
-wire [15:0] pc_out, pc_mux, ret_addr, pc, pc_add_2;
+wire [15:0] pc_out, pc_mux, ret_addr, pc, pc_add_2, next_pc;
 
 // ========================= PROGRAM COUNTER =========================
 program_counter ic11 (
     .clk(clk_out),
     .reset(reset),
-    .pc_in(pc_mux),
+    .pc_in(next_pc),
     .pc_out(pc),
     .hold_hlt(hold_hlt));
 
@@ -133,11 +133,20 @@ MUX_2_1 ic8 (
     .mux(memtoreg),
     .outmux(data_reg));
 
+//this ic12 is branch_mux
 MUX_2_1_PC ic12 (
     .B(pc_out),
     .A(pc_add_2),   
-    .mux(alu_src),
+    .mux(branch_out),
     .outmux(pc_mux));
+// ========================= MUX jump =========================
+MUX_jump ic21(
+    .pc_add_2(pc_add_2),
+    .pc_branch_mux(pc_mux),
+    .jump_signal(jump),
+    .instruction(instruction),
+    .jump_target(next_pc)
+    );
     
 //MUX_3_1_RET ic16 (
 //    .A(in_mux),
@@ -147,11 +156,13 @@ MUX_2_1_PC ic12 (
 //    .outmux(muxicr_in));
 
 // ========================= ADD_PC (PC + IMM) =========================
+//ic9 for add branch
 add_pc ic9 (
     .pc(pc_add_2),
     .imm(imm_out),
     .pc_out(pc_out));
     
+//ic10 for increase pc
 pc_add_2 ic10 (
     .pc(pc_add_2),
     .imm(CONST),
@@ -162,7 +173,7 @@ C_U ic17 (
     .opcode(opcode),    .funct3(funct3),    .mem_read(mem_read_en),     .reg_wrt(reg_wrt),
     .alu_src(alu_src),  .pc_sel(pc_sel),    .mem_write(mem_write_en),   .branch(branch),    
     .push(push),        .pop(pop),          .alu_op(alu_op),            .memtoreg(memtoreg),
-    .PCsel(PCsel),      .immtype(immtype)
+    .PCsel(PCsel),      .immtype(immtype),   .jump(jump)
 );
 
 // ========================= CLOCK =========================  
