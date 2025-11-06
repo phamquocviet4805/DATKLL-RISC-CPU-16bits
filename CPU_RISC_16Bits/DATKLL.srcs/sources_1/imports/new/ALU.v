@@ -23,7 +23,7 @@
 module ALU(
     input signed [15:0] A, B,
     input [5:0] alu_sel,          
-    output reg [15:0] ALU_out,
+    output reg [15:0] ALU_out, hi_from_alu, lo_from_alu,
     output reg cmp
 );
 reg [31:0] mult_result;
@@ -39,10 +39,18 @@ always @(*) begin
         6'b000000: ALU_out = A + B;                      // ADDU
         6'b000001: ALU_out = A - B;                      // SUBU
         6'b000010: begin                                 // MULTU
-            // Nothing
+             mult_result = A * B;
+             hi_from_alu = mult_result[31:16];
+             lo_from_alu = mult_result[15:0];
         end
         6'b000011: begin                                 // DIVU
-            // Nothing
+            if (B == 16'h0000) begin
+                  hi_from_alu = 16'h0000;
+                  lo_from_alu = 16'h0000;
+            end else begin
+                  hi_from_alu = A % B;
+                  lo_from_alu = A / B;
+            end
         end
         6'b000100: ALU_out = A & B;                      // AND
         6'b000101: ALU_out = A | B;                      // OR
@@ -53,10 +61,18 @@ always @(*) begin
         6'b001000: ALU_out = $signed(A) + $signed(B);    // ADD
         6'b001001: ALU_out = $signed(A) - $signed(B);    // SUB
         6'b001010: begin                                 // MULT
-            // Nothing
+               mult_result = $signed(A) * $signed(B);
+               hi_from_alu = mult_result[31:16];
+               lo_from_alu = mult_result[15:0];
         end
         6'b001011: begin                                 // DIV
-            // Nothing
+              if (B == 16'h0000) begin
+                  hi_from_alu = 16'h0000;
+                  lo_from_alu = 16'h0000;
+              end else begin
+                  hi_from_alu = $signed(A) % $signed(B);
+                  lo_from_alu = $signed(A) / $signed(B);
+              end
         end
         6'b001100: ALU_out = ($signed(A) < $signed(B)) ? 16'd1 : 16'd0;  // SLT (signed)
         6'b001101: ALU_out = (A == B) ? 16'd1 : 16'd0;                   // SEQ
