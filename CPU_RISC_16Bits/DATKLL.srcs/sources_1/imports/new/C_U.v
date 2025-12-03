@@ -22,9 +22,10 @@
 
 module C_U( 
     input [3:0] opcode, input [2:0] funct3,
-    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, push, pop, reg_dst, hold_hlt,
-    output reg [2:0] immtype, 
-    output reg [3:0] alu_op
+    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, push, pop, reg_dst, hold_hlt, jump,
+    output reg [2:0] immtype, mfsr_sel,
+    output reg [3:0] alu_op,
+    output reg special_to_reg, ra_signal, at_signal, hi_signal, lo_signal, hi_from_alu_signal, lo_from_alu_signal
 );
 always @(*)
 begin
@@ -34,17 +35,33 @@ begin
     mem_write = 1'b0;
     memtoreg = 1'b1;
     alu_op = 4'b0000;
+    jump = 1'b0;
     branch = 1'b0;   
     immtype = 3'b000;       
     pop = 1'b0;
     push = 1'b0;
     reg_dst = 1'b0;
     hold_hlt = 1'b0;
+    special_to_reg = 1'b0;
+    ra_signal = 1'b0;
+    at_signal = 1'b0;
+    hi_signal = 1'b0;
+    lo_signal = 1'b0;
+    hi_from_alu_signal = 1'b0;
+    lo_from_alu_signal = 1'b0;
     case(opcode) 
     4'b0000:  // ALU0
     begin 
         reg_wrt = 1'b1;
         reg_dst = 1'b1; 
+        case(funct3)
+            3'b010,
+            3'b011:
+            begin
+               hi_from_alu_signal = 1'b1;
+               lo_from_alu_signal = 1'b1;
+            end
+        endcase
     end
     4'b0001:    // ALU1
     begin
@@ -60,6 +77,14 @@ begin
 //        pop = 1'b0;
 //        push = 1'b0;
 //        pc_sel = 1'b0;
+        case(funct3)
+            3'b010,
+            3'b011:
+            begin
+               hi_from_alu_signal = 1'b1;
+               lo_from_alu_signal = 1'b1;
+            end
+        endcase
     end
     4'b0010:    // SFT
     begin
@@ -183,7 +208,7 @@ begin
     begin
 //        alu_src = 1'b1;
 //        reg_wrt = 1'b0;
-//        mem_read = 1'b0;
+          mem_read = 1'b1;
 //        mem_write = 1'b1;
 //        memtoreg = 1'b0;
 //        alu_op = 4'b1001;
@@ -192,11 +217,14 @@ begin
 //        PCsel = 2'b00;
 //        pop = 1'b0;
 //        push = 1'b0;
+          memtoreg  = 1'b0;
+          special_to_reg = 1'b1;
+          mfsr_sel  = funct3;
     end 
         4'b1010: // MTSR
     begin
 //        alu_src = 1'b1;
-//        reg_wrt = 1'b0;
+          reg_wrt = 1'b0;
 //        mem_read = 1'b0;
 //        mem_write = 1'b1;
 //        memtoreg = 1'b0;
@@ -206,7 +234,14 @@ begin
 //        PCsel = 2'b00;
 //        pop = 1'b0;
 //        push = 1'b0;
-    end 
+          case (funct3)
+             3'b010: ra_signal = 1'b1;
+             3'b011: at_signal = 1'b1;
+             3'b100: hi_signal = 1'b1;
+             3'b101: lo_signal = 1'b1;
+           default: ;
+           endcase
+        end 
         4'b1010: // HLT
     begin
         hold_hlt = 1'b1;

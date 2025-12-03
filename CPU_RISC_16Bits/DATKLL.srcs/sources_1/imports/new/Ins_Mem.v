@@ -33,13 +33,7 @@ module Ins_Mem(address,opcode,rd,rs,rt,funct3,instruction);
 wire [2:0] instr_type;
 reg [7:0] imem[0:2047];
 integer i;
-initial begin
-//    $readmemb("test.prog", imem);
-//    $display("==== Test readmemb ins_mem ====");
-//    for(i=0;i<50;i=i+1)
-//    begin
-//        $display("imem[%0d] = %b",i, imem[i]);
-//    end    
+initial begin    
 imem[0] = 8'b1110_0000;
 imem[1] = 8'b0000_0010; // EI
 
