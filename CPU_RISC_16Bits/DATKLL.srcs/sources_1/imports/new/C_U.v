@@ -22,231 +22,178 @@
 
 module C_U( 
     input [3:0] opcode, input [2:0] funct3,
-    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, push, pop, reg_dst, hold_hlt, jump,
+    output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, reg_dst, hold_hlt, jump,
     output reg [2:0] immtype, mfsr_sel,
     output reg [3:0] alu_op,
     output reg special_to_reg, ra_signal, at_signal, hi_signal, lo_signal, hi_from_alu_signal, lo_from_alu_signal
 );
-always @(*)
-begin
-    alu_src = 1'b0;
-    reg_wrt = 1'b0;
-    mem_read = 1'b0;
-    mem_write = 1'b0;
-    memtoreg = 1'b1;
-    alu_op = 4'b0000;
-    jump = 1'b0;
-    branch = 1'b0;   
-    immtype = 3'b000;       
-    pop = 1'b0;
-    push = 1'b0;
-    reg_dst = 1'b0;
-    hold_hlt = 1'b0;
-    special_to_reg = 1'b0;
-    ra_signal = 1'b0;
-    at_signal = 1'b0;
-    hi_signal = 1'b0;
-    lo_signal = 1'b0;
+always @(*) begin
+    // ======= Giá tr? m?c ð?nh =======
+    alu_src            = 1'b0;
+    reg_wrt            = 1'b0;
+    mem_read           = 1'b0;
+    mem_write          = 1'b0;
+    memtoreg           = 1'b1;   // 1: ALU, 0: MEM (khi special_to_reg = 0)
+    alu_op             = 4'b0000;
+    jump               = 1'b0;
+    branch             = 1'b0;   
+    immtype            = 3'b000;       
+    reg_dst            = 1'b0;   // 0: rt, 1: rd
+    hold_hlt           = 1'b0;
+    special_to_reg     = 1'b0;
+    mfsr_sel           = 3'b000;
+
+    ra_signal          = 1'b0;
+    at_signal          = 1'b0;
+    hi_signal          = 1'b0;
+    lo_signal          = 1'b0;
     hi_from_alu_signal = 1'b0;
     lo_from_alu_signal = 1'b0;
-    case(opcode) 
-    4'b0000:  // ALU0
-    begin 
-        reg_wrt = 1'b1;
-        reg_dst = 1'b1; 
-        case(funct3)
-            3'b010,
-            3'b011:
-            begin
-               hi_from_alu_signal = 1'b1;
-               lo_from_alu_signal = 1'b1;
-            end
-        endcase
-    end
-    4'b0001:    // ALU1
-    begin
-//        alu_src = 1'b0;
-//        reg_wrt = 1'b1;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b1;
-//        alu_op = 4'b0001;
-//        branch = 1'b0;   
-//        immtype = 3'b000;   
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b0;
-        case(funct3)
-            3'b010,
-            3'b011:
-            begin
-               hi_from_alu_signal = 1'b1;
-               lo_from_alu_signal = 1'b1;
-            end
-        endcase
-    end
-    4'b0010:    // SFT
-    begin
-//        alu_src = 1'b0;
-//        reg_wrt = 1'b1;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b1;
-//        alu_op = 4'b0010;
-//        branch = 1'b0;   
-//        immtype = 3'b000;    
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b0;
-    end
-    4'b0011:    // ADDI
-    begin
-//        alu_src = 1'b1;
-//        reg_wrt = 1'b1;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b1;
-//        alu_op = 4'b0011;
-//        branch = 1'b0;   
-//        immtype = 3'b001;
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b0;
-    end
-    4'b0100:    // SLTI
-    begin
-//        alu_src = 1'b1;
-//        reg_wrt = 1'b1;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b1;
-//        alu_op = 4'b0100;
-//        branch = 1'b0;   
-//        immtype = 3'b000;
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b0;
-    end
-    4'b0101:  // BNEQ
-    begin
-//        alu_src = 1'b0;
-//        reg_wrt = 1'b0;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b0101;
-//        branch = 1'b1;  
-//        immtype = 3'b000; 
-//        PCsel = 2'b10;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b1;
-    end
-    4'b0110:  // BGTZ
-    begin
-//        alu_src = 1'b0;
-//        reg_wrt = 1'b0;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b0110;
-//        branch = 1'b1;  
-//        immtype = 3'b011; 
-//        PCsel = 2'b10;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b1;
-    end
-    4'b0111:  // JUMP
-    begin
-//        alu_src = 1'b0;
-//        reg_wrt = 1'b0;
-//        mem_read = 1'b0;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b0111;
-//        branch = 1'b1;  
-//        immtype = 3'b001; 
-//        PCsel = 2'b10;
-//        pop = 1'b0;
-//        push = 1'b0;
-//        pc_sel = 1'b1;
-    end
-    4'b1000:  // LH
-    begin
-//        alu_src = 1'b1;
-//        reg_wrt = 1'b1;
-//        mem_read = 1'b1;
-//        mem_write = 1'b0;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b1000;
-//        branch = 1'b0;  
-//        immtype = 3'b000; 
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-    end
-    4'b1001:  // SH
-    begin
-//        alu_src = 1'b1;
-//        reg_wrt = 1'b0;
-//        mem_read = 1'b0;
-//        mem_write = 1'b1;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b1000;
-//        branch = 1'b0;  
-//        immtype = 3'b000; 
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-    end
-    4'b1010: // MFSR
-    begin
-//        alu_src = 1'b1;
-//        reg_wrt = 1'b0;
-          mem_read = 1'b1;
-//        mem_write = 1'b1;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b1001;
-//        branch = 1'b0;  
-//        immtype = 3'b000; 
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-          memtoreg  = 1'b0;
-          special_to_reg = 1'b1;
-          mfsr_sel  = funct3;
-    end 
-        4'b1010: // MTSR
-    begin
-//        alu_src = 1'b1;
-          reg_wrt = 1'b0;
-//        mem_read = 1'b0;
-//        mem_write = 1'b1;
-//        memtoreg = 1'b0;
-//        alu_op = 4'b1001;
-//        branch = 1'b0;  
-//        immtype = 3'b000; 
-//        PCsel = 2'b00;
-//        pop = 1'b0;
-//        push = 1'b0;
-          case (funct3)
-             3'b010: ra_signal = 1'b1;
-             3'b011: at_signal = 1'b1;
-             3'b100: hi_signal = 1'b1;
-             3'b101: lo_signal = 1'b1;
-           default: ;
-           endcase
-        end 
-        4'b1010: // HLT
-    begin
-        hold_hlt = 1'b1;
-    end
-    endcase
 
+    // ======= Decode theo opcode =======
+    case (opcode)
+        // 0000: ALU0 (unsigned R-type)
+        4'b0000: begin
+            reg_wrt = 1'b1;
+            reg_dst = 1'b1;      // rd
+            alu_op  = 4'b0000;
+
+            // multu / divu ghi HI/LO t? ALU
+            if (funct3 == 3'b010 || funct3 == 3'b011) begin
+                hi_from_alu_signal = 1'b1;
+                lo_from_alu_signal = 1'b1;
+            end
+        end
+
+        // 0001: ALU1 (signed R-type)
+        4'b0001: begin
+            reg_wrt = 1'b1;
+            reg_dst = 1'b1;      // rd
+            alu_op  = 4'b0001;
+
+            // mult / div ghi HI/LO t? ALU
+            if (funct3 == 3'b010 || funct3 == 3'b011) begin
+                hi_from_alu_signal = 1'b1;
+                lo_from_alu_signal = 1'b1;
+            end
+        end
+
+        // 0010: Shift / Rotate (R-type)
+        4'b0010: begin
+            reg_wrt = 1'b1;
+            reg_dst = 1'b1;      // rd
+            alu_op  = 4'b0010;
+        end
+
+        // 0011: ADDI (I-type)
+        4'b0011: begin
+            alu_src = 1'b1;      // dùng imm
+            reg_wrt = 1'b1;
+            reg_dst = 1'b0;      // rt
+            memtoreg = 1'b1;     // t? ALU
+            alu_op  = 4'b0011;
+            immtype = 3'b001;    // ki?u sign-extend cho addi (tu? b?n dùng)
+        end
+
+        // 0100: SLTI (I-type)
+        4'b0100: begin
+            alu_src = 1'b1;
+            reg_wrt = 1'b1;
+            reg_dst = 1'b0;      // rt
+            memtoreg = 1'b1;     // t? ALU
+            alu_op  = 4'b0100;
+            immtype = 3'b001;    // imm signed
+        end
+
+        // 0101: BNEQ (I-type branch)
+        4'b0101: begin
+            alu_src = 1'b0;      // so sánh rs, rt
+            reg_wrt = 1'b0;
+            mem_read  = 1'b0;
+            mem_write = 1'b0;
+            memtoreg  = 1'b0;
+            alu_op    = 4'b0101; // ALU ch?n: cmp !=
+            branch    = 1'b1;
+            immtype   = 3'b010;  // imm dùng làm offset branch (tu? b?n)
+        end
+
+        // 0110: BGTZ (I-type branch)
+        4'b0110: begin
+            alu_src = 1'b0;      // A=rs, B=0 (bên datapath set)
+            reg_wrt = 1'b0;
+            mem_read  = 1'b0;
+            mem_write = 1'b0;
+            memtoreg  = 1'b0;
+            alu_op    = 4'b0110; // ALU ch?n: cmp >
+            branch    = 1'b1;
+            immtype   = 3'b011;  // ki?u offset riêng (n?u c?n)
+        end
+
+        // 0111: JUMP (J-type)
+        4'b0111: begin
+            jump    = 1'b1;
+            reg_wrt = 1'b0;
+            mem_read  = 1'b0;
+            mem_write = 1'b0;
+            memtoreg  = 1'b0;
+        end
+
+        // 1000: LH (I-type)
+        4'b1000: begin
+            alu_src   = 1'b1;    // rs + imm
+            reg_wrt   = 1'b1;
+            reg_dst   = 1'b0;    // rt
+            mem_read  = 1'b1;
+            mem_write = 1'b0;
+            memtoreg  = 1'b0;    // WB t? MEM
+            alu_op    = 4'b1000; // ALU: tính ð?a ch? lh/sh
+            immtype   = 3'b001;  // imm cho ð?a ch?
+        end
+
+        // 1001: SH (I-type)
+        4'b1001: begin
+            alu_src   = 1'b1;
+            reg_wrt   = 1'b0;
+            mem_read  = 1'b0;
+            mem_write = 1'b1;
+            memtoreg  = 1'b0;
+            alu_op    = 4'b1000; // v?n dùng ALU ki?u lh/sh
+            immtype   = 3'b001;
+        end
+
+        // 1010: MFSR (R-type ð?c bi?t: rd <- special)
+        4'b1010: begin
+            reg_wrt        = 1'b1;
+            reg_dst        = 1'b1;      // rd
+            special_to_reg = 1'b1;      // WB t? special_register
+            mfsr_sel       = funct3;    // ch?n ZERO/PC/RA/AT/HI/LO
+            mem_read       = 1'b0;      // không dùng memory
+            mem_write      = 1'b0;
+        end
+
+        // 1011: MTSR (R-type ð?c bi?t: special <- rt)
+        4'b1011: begin
+            reg_wrt   = 1'b0;     // không ghi GPR
+            mem_read  = 1'b0;
+            mem_write = 1'b0;
+            case (funct3)
+                3'b010: ra_signal = 1'b1; // mtra
+                3'b011: at_signal = 1'b1; // mtat
+                3'b100: hi_signal = 1'b1; // mthi
+                3'b101: lo_signal = 1'b1; // mtlo
+                default: ;
+            endcase
+        end
+
+        // 1111: HLT
+        4'b1111: begin
+            hold_hlt = 1'b1;
+        end
+
+        default: begin
+            // Gi? default
+        end
+    endcase
 end
+
 endmodule

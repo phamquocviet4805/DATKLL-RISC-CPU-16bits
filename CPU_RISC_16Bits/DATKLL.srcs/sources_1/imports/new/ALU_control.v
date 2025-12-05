@@ -78,22 +78,25 @@ module ALU_control(
         4'b0100: begin
             ALU_control = 6'b001100;  // SLTI
         end   
-//        4'b0101: begin  //Branch Compare           
-//            ALU_control = 6'b011000;  // BNEQ
-//        end
-//        4'b0110: begin
-//            ALU_control = 6'b011001;  // BGTZ
-//        end
-//        4'b0111: begin  //Jump           
-//            ALU_control = 6'b011010;    // jump
-//        end
-        4'b1000: begin //Memory           
-            ALU_control = 6'b011011;    // lh - sh
+        
+        4'b0101: begin // BNEQ
+            ALU_control = 6'b011000;  // so sánh not equal, dùng cmp
+            end
+
+        4'b0110: begin // BGTZ
+            ALU_control = 6'b011001;  // so sánh > 0, dùng cmp
         end
-//        4'b1001: begin //MFSR - MTSR
-//            ALU_control = 6'b000000;    
-//        end
-        default: ALU_control = 6'b111111;  // Defautl: ADDU
+
+        4'b1000: begin // LH/SH - tính address
+            ALU_control = 6'b011011;  // address = (rs + imm) << 1
+         end
+       
+         // 0111: JUMP  -> không dùng ALU
+         // 1010: MFSR -> không dùng ALU
+         // 1011: MTSR -> không dùng ALU
+         // 1111: HLT  -> không dùng ALU
+         
+        default: ALU_control = 6'b111111;  // Default: ADDU
         endcase
     end
 endmodule

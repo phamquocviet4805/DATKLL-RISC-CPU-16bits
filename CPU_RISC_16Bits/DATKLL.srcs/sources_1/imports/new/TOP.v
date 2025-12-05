@@ -40,7 +40,7 @@ wire [15:0] in_mux, instruction;
 wire [15:0] pc_in, muxicr_in;
 wire [15:0] ALU_out, imm_out, outmux, read_data, mfsr_data, wb_mux_out, hi_from_alu_data, lo_from_alu_data;
 wire [15:0] data_reg, readA_out, readB_out;
-wire [15:0] pc_out, pc_mux, ret_addr, pc, pc_add_2, next_pc;
+wire [15:0] pc_out, pc_mux, ret_addr, pc, pc_plus2, next_pc, jump_out, pc_branch;
 
 // ========================= PROGRAM COUNTER =========================
 program_counter ic11 (
@@ -86,10 +86,10 @@ ALU ic4 (
     .B(outmux),
     .alu_sel(alu_sel),
     .ALU_out(ALU_out),
-    .cmp(cmp),
     .hi_from_alu(hi_from_alu_data),
-    .lo_from_alu_data(lo_from_alu_data)
-    );
+    .lo_from_alu(lo_from_alu_data),
+    .cmp(cmp)
+);
     
 // ========================= BRANCH  =========================
 branch ic14 (
@@ -113,16 +113,13 @@ Imm_gen ic6 (
 data_mem ic7 (
     .mem_write_en(mem_write_en),
     .sp_addr(pc),
-    .push(push),
-    .pop(pop),
     .ret_addr(ret_addr),
     .clk(clk_out),
     .mem_read_en(mem_read_en),
     .addr(ALU_out),
     .write_data(readB_out),
     .read_data(read_data),
-    .reset(reset),
-    .icr_sel(icr_sel));
+    .reset(reset));
 
 // ========================= MUX 2 to 1 =========================
 MUX_2_1 ic20 (
@@ -141,9 +138,9 @@ MUX_2_1 ic8 (
 //this ic12 is branch_mux
 MUX_2_1_PC ic12 (
     .B(pc_out),
-    .A(pc_add_2),   
+    .A(pc_plus2),   
     .mux(branch_out),
-    .outmux(pc_mux));
+    .outmux(pc_branch));
     
 mux_mtsr_wb ic23(
     .A(wb_mux_out),
@@ -152,12 +149,18 @@ mux_mtsr_wb ic23(
     .outmux(data_reg));
 
 // ========================= MUX jump =========================
-MUX_jump ic21(
-    .pc_add_2(pc_add_2),
-    .pc_branch_mux(pc_mux),
-    .jump_signal(jump),
+
+Jump ic24(
+    .pc(pc_plus2),
     .instruction(instruction),
-    .jump_target(next_pc)
+    .jump_target(jump_out)
+    );
+
+MUX_jump ic21(
+    .pc_jump(jump_out),
+    .pc_branch(pc_branch),
+    .jump_signal(jump),
+    .next_pc(next_pc)
     );
     
 //MUX_3_1_RET ic16 (
@@ -170,33 +173,65 @@ MUX_jump ic21(
 // ========================= ADD_PC (PC + IMM) =========================
 //ic9 for add branch
 add_pc ic9 (
-    .pc(pc_add_2),
+    .pc(pc_plus2),
     .imm(imm_out),
     .pc_out(pc_out));
     
 //ic10 for increase pc
 pc_add_2 ic10 (
-    .pc(pc_add_2),
+    .pc(pc),
     .imm(CONST),
-    .pc_out(pc_add_2));
+    .pc_out(pc_plus2));
 
 // ========================= C_U =========================   
 C_U ic17 (
-    .opcode(opcode),           .funct3(funct3),           .mem_read(mem_read_en),     .reg_wrt(reg_wrt),
-    .alu_src(alu_src),         .pc_sel(pc_sel),           .mem_write(mem_write_en),   .branch(branch),    
-    .push(push),               .pop(pop),                 .alu_op(alu_op),            .memtoreg(memtoreg),
-    .PCsel(PCsel),             .immtype(immtype),         .jump(jump),                .ra_signal(ra_signal),      
-    .at_signal(at_signal),     .hi_signal(hi_signal),     .lo_signal(lo_signal),      .mfsr_sel(mfsr_sel),
-    .special_to_reg(special_to_reg),      .hi_from_alu_signal(hi_from_alu_signal),             
+    .opcode(opcode),
+    .funct3(funct3),
+
+    .mem_read(mem_read_en),
+    .memtoreg(memtoreg),
+    .reg_wrt(reg_wrt),
+    .alu_src(alu_src),
+    .mem_write(mem_write_en),
+    .branch(branch),
+    .reg_dst(reg_dst),
+    .hold_hlt(hold_hlt),
+    .jump(jump),
+
+    .immtype(immtype),
+    .mfsr_sel(mfsr_sel),
+    .alu_op(alu_op),
+
+    .special_to_reg(special_to_reg),
+    .ra_signal(ra_signal),
+    .at_signal(at_signal),
+    .hi_signal(hi_signal),
+    .lo_signal(lo_signal),
+    .hi_from_alu_signal(hi_from_alu_signal),
     .lo_from_alu_signal(lo_from_alu_signal)
 );
 
 // ========================= SPECIAL REGISTER =========================
 special_register ic22 (
-    .clk(clk_out),    .ra_signal(ra_signal),     .at_signal(at_signal),     .hi_signal(hi_signal),     .lo_signal(lo_signal),
-    .rst(reset),      .ra_data(readB_out),       .at_data(readB_out),       .hi_data(readB_out),       .lo_data(readB_out),
-    .pc(pc),          .mfsr_sel(mfsr_sel),       .mfsr_data(mfsr_data),      .hi_from_alu_signal(hi_from_alu_signal),
-    .lo_from_alu_signal(lo_from_alu_signal)
+    .clk(clk_out),
+    .rst(reset),
+    .ra_signal(ra_signal),
+    .at_signal(at_signal),
+    .hi_signal(hi_signal),
+    .lo_signal(lo_signal),
+    .hi_from_alu_signal(hi_from_alu_signal),
+    .lo_from_alu_signal(lo_from_alu_signal),
+
+    .ra_data(readB_out),
+    .at_data(readB_out),
+    .hi_data(readB_out),          // mthi: HI <- rt
+    .lo_data(readB_out),          // mtlo: LO <- rt
+    .pc(pc_plus2),
+    .hi_from_alu_data(hi_from_alu_data),   // t? ALU
+    .lo_from_alu_data(lo_from_alu_data),   // t? ALU
+
+    .mfsr_sel(mfsr_sel),
+    .mfsr_data(mfsr_data)
 );
 
 // ========================= CLOCK =========================  

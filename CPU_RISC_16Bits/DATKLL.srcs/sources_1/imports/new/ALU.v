@@ -32,7 +32,8 @@ always @(*) begin
     // Default Value
     ALU_out = 16'b0;
     cmp = 1'b0;
-
+    hi_from_alu = 16'b0;
+    lo_from_alu = 16'b0;
 
     case (alu_sel)
         //ALU0: Unsigned

@@ -21,11 +21,37 @@
 
 
 module Imm_gen( 
-    input [15:0] instruction, 
-    input [2:0] imm_type, 
-    output [15:0] imm_out 
+    input  [15:0] instruction, 
+    input  [2:0]  imm_type, 
+    output reg [15:0] imm_out 
 );
-assign imm_out =    (imm_type ==3'b000)? {{10{instruction[5]}}, instruction[5:0]}: //I-type signed
-                    {{3{1'b0}}, instruction[11:0], 1'b0};   // Other type imm_out = imm_extended * 2
-          
+    always @(*) begin
+        case (imm_type)
+            // I-type signed: addi, slti, lh, sh
+            // immediate n?m ? [5:0]
+            3'b001: begin
+                imm_out = {{10{instruction[5]}}, instruction[5:0]};
+            end
+
+            // Branch offset: bneq, bgtz
+            // i là s? có d?u, PC <- PC + i*2
+            // -> sign-extend 6 bit r?i << 1
+            3'b010,
+            3'b011: begin
+                imm_out = {{9{instruction[5]}}, instruction[5:0], 1'b0};
+                //   ^ 9 bit sign + 6 bit + 1 bit shift = 16
+            end
+
+            // Jump: PC <- PC[15:13] || (addr<<1)
+            // addr l?y t? [11:0], không sign-extend
+//            3'b100: begin
+//                imm_out = {3'b000, instruction[11:0], 1'b0};
+//            end
+
+            // M?c ð?nh: không dùng immediate
+            default: begin
+                imm_out = 16'b0;
+            end
+        endcase
+    end
 endmodule

@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 07/02/2025 11:03:21 AM
+// Create Date: 12/03/2025 03:15:05 PM
 // Design Name: 
-// Module Name: branch
+// Module Name: MUX_jump
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -19,11 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module branch(
-    input  cmp,
-    input  branch,
-    output branch_out
-);
-    assign branch_out = cmp & branch;
+module MUX_jump(input[15:0] pc_jump, pc_branch, input jump_signal, output[15:0] next_pc);
+    assign pc_mux = (jump_signal == 1'b0) ? pc_jump : pc_branch;
 endmodule
