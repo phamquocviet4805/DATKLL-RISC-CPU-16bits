@@ -20,5 +20,5 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module MUX_jump(input[15:0] pc_jump, pc_branch, input jump_signal, output[15:0] next_pc);
-    assign pc_mux = (jump_signal == 1'b0) ? pc_jump : pc_branch;
+    assign next_pc = (jump_signal == 1'b1) ? pc_jump : pc_branch;
 endmodule

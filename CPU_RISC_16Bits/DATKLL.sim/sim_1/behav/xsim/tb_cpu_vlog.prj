@@ -1,0 +1,30 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../DATKLL.srcs/sources_1/imports/new/ALU.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/ALU_control.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/C_U.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/Clock_div.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/Imm_gen.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/Ins_Mem.v" \
+"../../../../DATKLL.srcs/sources_1/new/Jump.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/MUX_2_1.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/MUX_2_1_PC.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/MUX_alu_2_1.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/MUX_clk.v" \
+"../../../../DATKLL.srcs/sources_1/new/MUX_jump.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/TOP.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/add_pc.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/branch.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/data_mem.v" \
+"../../../../DATKLL.srcs/sources_1/new/mux_mtsr_wb.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/pc_add_2.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/program_counter.v" \
+"../../../../DATKLL.srcs/sources_1/imports/new/reg_file.v" \
+"../../../../DATKLL.srcs/sources_1/new/special_register.v" \
+"../../../../DATKLL.srcs/sim_1/new/tb_cpu.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

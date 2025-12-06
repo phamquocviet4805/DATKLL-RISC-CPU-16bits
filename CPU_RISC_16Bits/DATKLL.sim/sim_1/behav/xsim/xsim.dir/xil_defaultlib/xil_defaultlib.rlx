@@ -1,0 +1,27 @@
+0.7
+2020.2
+Oct 14 2022
+05:20:55
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.sim/sim_1/behav/xsim/glbl.v,1665704903,verilog,,,,glbl,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sim_1/new/tb_cpu.v,1765008116,verilog,,,,tb_cpu,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/ALU.v,1764774298,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/ALU_control.v,,ALU,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/ALU_control.v,1764767691,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/C_U.v,,ALU_control,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/C_U.v,1764947172,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/Clock_div.v,,C_U,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/Clock_div.v,1757328954,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/Imm_gen.v,,Clock_div,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/Imm_gen.v,1764947210,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/Ins_Mem.v,,Imm_gen,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/Ins_Mem.v,1765003139,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/Jump.v,,Ins_Mem,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_2_1.v,1762271229,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_2_1_PC.v,,MUX_2_1,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_2_1_PC.v,1762271199,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_alu_2_1.v,,MUX_2_1_PC,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_alu_2_1.v,1759916995,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_clk.v,,MUX_alu_2_1,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_clk.v,1757328954,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/MUX_jump.v,,MUX_clk,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v,1765003272,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/add_pc.v,,TOP,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/add_pc.v,1759917909,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/branch.v,,add_pc,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/branch.v,1764947358,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/data_mem.v,,branch,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/data_mem.v,1764939498,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/mux_mtsr_wb.v,,data_mem,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/pc_add_2.v,1759917898,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/program_counter.v,,pc_add_2,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/program_counter.v,1762276435,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/reg_file.v,,program_counter,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/reg_file.v,1765010609,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/special_register.v,,reg_file,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/Jump.v,1764948854,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/MUX_2_1.v,,Jump,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/MUX_jump.v,1765008034,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v,,MUX_jump,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/mux_mtsr_wb.v,1764749747,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/pc_add_2.v,,mux_mtsr_wb,,,,,,,,
+D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/new/special_register.v,1764776132,verilog,,D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sim_1/new/tb_cpu.v,,special_register,,,,,,,,

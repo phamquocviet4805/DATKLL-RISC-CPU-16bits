@@ -44,7 +44,7 @@ wire [15:0] pc_out, pc_mux, ret_addr, pc, pc_plus2, next_pc, jump_out, pc_branch
 
 // ========================= PROGRAM COUNTER =========================
 program_counter ic11 (
-    .clk(clk_out),
+    .clk(clk),
     .reset(reset),
     .pc_in(next_pc),
     .pc_out(pc),
@@ -70,8 +70,7 @@ reg_file ic2 (
     .readB_out(readB_out),
     .data(data_reg),
     .r3(r3),
-    .clk(clk_out),
-    .bank_sel(bank_sel));
+    .clk(clk));
 
 // ========================= ALU MUX =========================
 MUX_alu_2_1 ic3 (
@@ -114,7 +113,7 @@ data_mem ic7 (
     .mem_write_en(mem_write_en),
     .sp_addr(pc),
     .ret_addr(ret_addr),
-    .clk(clk_out),
+    .clk(clk),
     .mem_read_en(mem_read_en),
     .addr(ALU_out),
     .write_data(readB_out),
@@ -213,7 +212,7 @@ C_U ic17 (
 
 // ========================= SPECIAL REGISTER =========================
 special_register ic22 (
-    .clk(clk_out),
+    .clk(clk),
     .rst(reset),
     .ra_signal(ra_signal),
     .at_signal(at_signal),

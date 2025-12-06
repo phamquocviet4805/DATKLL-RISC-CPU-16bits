@@ -50,6 +50,6 @@ reg [15:0] x [0:7];
 
     assign readA_out = x[rs];
     assign readB_out = x[rt];
-    assign r3        = x[3];    // debug / output r3 ra ngoài
+    assign r3        = x[0];    // debug / output r3 ra ngoài
 
 endmodule
