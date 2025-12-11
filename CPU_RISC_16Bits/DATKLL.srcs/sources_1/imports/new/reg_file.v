@@ -31,7 +31,7 @@ module reg_file(
     input  [15:0] data,
     output [15:0] readA_out,
     output [15:0] readB_out,
-    output [15:0] r3
+    output [15:0] r0, r1, r2, r3, r4, r5, r6, r7
 );
 
 reg [15:0] x [0:7];
@@ -50,6 +50,13 @@ reg [15:0] x [0:7];
 
     assign readA_out = x[rs];
     assign readB_out = x[rt];
-    assign r3        = x[0];    // debug / output r3 ra ngoài
+    assign r0        = x[0];    // debug 
+    assign r1        = x[1]; 
+    assign r2        = x[2]; 
+    assign r3        = x[3]; 
+    assign r4        = x[4]; 
+    assign r5        = x[5]; 
+    assign r6        = x[6];
+    assign r7        = x[7];
 
 endmodule

@@ -4,11 +4,12 @@ Running: D:/Vivado/Xilinx/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe --incr -
 Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 16 for port 'A' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:125]
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 16 for port 'B' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:126]
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 16 for port 'outmux' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:128]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 12 for port 'instruction' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:154]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 2 for port 'imm' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:182]
+WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 16 for port 'ret_addr' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:120]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 16 for port 'A' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:130]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 16 for port 'B' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:131]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 16 for port 'outmux' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:133]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 12 for port 'instruction' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:159]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 2 for port 'imm' [D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sources_1/imports/new/TOP.v:187]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis

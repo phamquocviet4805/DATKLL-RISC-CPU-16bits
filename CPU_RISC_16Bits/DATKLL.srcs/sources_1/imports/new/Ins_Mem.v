@@ -85,7 +85,7 @@ initial begin
     imem[30] = 8'b0110_1110; // 0x6E  word15 hi (bgtz r7, 1)
     imem[31] = 8'b0000_0001; // 0x01  word15 lo
 
-    imem[32] = 8'b0011_0001; // 0x31  word16 hi (addi r7, r0, 2)  ; b? skip
+    imem[32] = 8'b0011_0001; // 0x31  word16 hi (addi r7, r0, 2)  ; skipped by bgtz imem[30]
     imem[33] = 8'b1100_0010; // 0xC2  word16 lo
 
     imem[34] = 8'b0011_0001; // 0x31  word17 hi (addi r7, r0, 3)
@@ -94,7 +94,7 @@ initial begin
     imem[36] = 8'b0111_0000; // 0x70  word18 hi (j 20)
     imem[37] = 8'b0001_0100; // 0x14  word18 lo
 
-    imem[38] = 8'b0011_0000; // 0x30  word19 hi (addi r1, r0, 9)  ; b? skip
+    imem[38] = 8'b0011_0000; // 0x30  word19 hi (addi r1, r0, 9)  ; skipped by jump imem[36]
     imem[39] = 8'b0100_1001; // 0x49  word19 lo
 
     imem[40] = 8'b0011_0000; // 0x30  word20 hi (addi r1, r0, 4)

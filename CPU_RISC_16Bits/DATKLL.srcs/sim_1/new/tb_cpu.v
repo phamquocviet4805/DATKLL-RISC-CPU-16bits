@@ -29,7 +29,7 @@ module tb_cpu;
     reg interrupt_pending;    // b?n có th? cho nó = 0
     reg [1:0] mux_clk;        // ch?n clock trong CPU
 
-    wire [15:0] r3;
+    wire [15:0] r0, r1, r2, r3, r4, r5, r6, r7;
 
     // Instantiate TOP
     TOP uut (
@@ -37,7 +37,14 @@ module tb_cpu;
         .reset(reset),
         .interrupt_pending(interrupt_pending),
         .mux_clk(mux_clk),
-        .r3(r3)
+        .r0(r0),
+        .r1(r1),
+        .r2(r2),
+        .r3(r3),
+        .r4(r4),
+        .r5(r5),
+        .r6(r6),
+        .r7(r7)
     );
 
     // Clock 10ns = 100 MHz

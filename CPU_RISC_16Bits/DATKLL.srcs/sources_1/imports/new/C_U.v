@@ -62,6 +62,7 @@ always @(*) begin
             if (funct3 == 3'b010 || funct3 == 3'b011) begin
                 hi_from_alu_signal = 1'b1;
                 lo_from_alu_signal = 1'b1;
+                reg_wrt = 1'b0;
             end
         end
 
@@ -75,6 +76,7 @@ always @(*) begin
             if (funct3 == 3'b010 || funct3 == 3'b011) begin
                 hi_from_alu_signal = 1'b1;
                 lo_from_alu_signal = 1'b1;
+                reg_wrt = 1'b0;
             end
         end
 

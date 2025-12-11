@@ -21,7 +21,7 @@
 
 module TOP( 
     input clk, reset, interrupt_pending,
-    output [15:0] r3, 
+    output [15:0] r0, r1, r2, r3, r4, r5, r6, r7,
     input [1:0] mux_clk
 );
 
@@ -32,15 +32,13 @@ wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
 wire mux_pc_sel, branch, memtoreg, reg_dst, hold_hlt, jump;
 wire ra_signal, at_signal, hi_signal, lo_signal, special_to_reg, hi_from_alu_signal, lo_from_alu_signal;
 wire cmp;
-wire [1:0] PCsel;
 wire [2:0] rs, rt, rd, rd_raw, funct3, immtype, mfsr_sel;
 wire [3:0] opcode, alu_op;
-wire [5:0] alu_sel, ALU_control;
-wire [15:0] in_mux, instruction;
-wire [15:0] pc_in, muxicr_in;
+wire [5:0] alu_sel;
+wire [15:0] instruction;
 wire [15:0] ALU_out, imm_out, outmux, read_data, mfsr_data, wb_mux_out, hi_from_alu_data, lo_from_alu_data;
 wire [15:0] data_reg, readA_out, readB_out;
-wire [15:0] pc_out, pc_mux, ret_addr, pc, pc_plus2, next_pc, jump_out, pc_branch;
+wire [15:0] pc_out, pc, pc_plus2, next_pc, jump_out, pc_branch;
 
 // ========================= PROGRAM COUNTER =========================
 program_counter ic11 (
@@ -69,7 +67,14 @@ reg_file ic2 (
     .readA_out(readA_out),
     .readB_out(readB_out),
     .data(data_reg),
+    .r0(r0),
+    .r1(r1),
+    .r2(r2),
     .r3(r3),
+    .r4(r4),
+    .r5(r5),
+    .r6(r6),
+    .r7(r7),
     .clk(clk));
 
 // ========================= ALU MUX =========================
@@ -122,7 +127,7 @@ data_mem ic7 (
 
 // ========================= MUX 2 to 1 =========================
 MUX_2_1 ic20 (
-    .A(rs),
+    .A(rt),
     .B(rd_raw),
     .mux(reg_dst),
     .outmux(rd));
