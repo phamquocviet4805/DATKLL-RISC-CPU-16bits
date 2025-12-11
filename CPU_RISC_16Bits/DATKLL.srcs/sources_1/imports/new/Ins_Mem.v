@@ -52,22 +52,22 @@ initial begin
     imem[8]  = 8'b0000_0010; // 0x02  word4 hi  (multu r1, r2)
     imem[9]  = 8'b1000_0010; // 0x82  word4 lo
 
-    imem[10] = 8'b1010_0000; // 0xA0  word5 hi  (mflo r5)
+    imem[10] = 8'b1010_0000; // 0xA0  word5 hi  (mflo -> r5)
     imem[11] = 8'b0010_1101; // 0x2D  word5 lo
 
-    imem[12] = 8'b1010_0000; // 0xA0  word6 hi  (mfhi r6)
+    imem[12] = 8'b1010_0000; // 0xA0  word6 hi  (mfhi -> r6)
     imem[13] = 8'b0011_0100; // 0x34  word6 lo
 
-    imem[14] = 8'b1011_0001; // 0xB1  word7 hi  (mtra r5 ? RA)
+    imem[14] = 8'b1011_0001; // 0xB1  word7 hi  (mtra r5 -> RA)
     imem[15] = 8'b0100_0010; // 0x42  word7 lo
 
-    imem[16] = 8'b1011_0001; // 0xB1  word8 hi  (mtat r6 ? AT)
+    imem[16] = 8'b1011_0001; // 0xB1  word8 hi  (mtat r6 -> AT)
     imem[17] = 8'b1000_0011; // 0x83  word8 lo
 
-    imem[18] = 8'b1010_0000; // 0xA0  word9 hi  (mfra r7)
+    imem[18] = 8'b1010_0000; // 0xA0  word9 hi  (mfra -> r7)
     imem[19] = 8'b0011_1010; // 0x3A  word9 lo
 
-    imem[20] = 8'b1010_0000; // 0xA0  word10 hi (mfat r4)
+    imem[20] = 8'b1010_0000; // 0xA0  word10 hi (mfat -> r4)
     imem[21] = 8'b0010_0011; // 0x23  word10 lo
 
     imem[22] = 8'b1001_0000; // 0x90  word11 hi (sh r3, 0(r0))
@@ -109,7 +109,7 @@ end
     assign instruction = {imem[address],imem[address+1]};
     assign opcode = instruction[15:12];
 
-    // phân lo?i opcode theo spec
+    // Seperate opcode by spec
     wire is_r_type = (opcode == 4'b0000 || // ALU0
                       opcode == 4'b0001 || // ALU1
                       opcode == 4'b0010 || // ALU2

@@ -50,13 +50,13 @@ module special_register(
             hi <= 16'h0000;
             lo <= 16'h0000;
         end else begin
-            // ghi t? MTSR
+            // Write from MTSR
             if (ra_signal) ra <= ra_data;
             if (at_signal) at <= at_data;
             if (hi_signal) hi <= hi_data;
             if (lo_signal) lo <= lo_data;
 
-            // ghi t? ALU (MULT/DIV) - ýu tiên cao hõn
+            // Write from ALU (MULT/DIV) - with priority
             if (hi_from_alu_signal) hi <= hi_from_alu_data;
             if (lo_from_alu_signal) lo <= lo_from_alu_data;
         end

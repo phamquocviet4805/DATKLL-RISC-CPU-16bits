@@ -80,21 +80,21 @@ module ALU_control(
         end   
         
         4'b0101: begin // BNEQ
-            ALU_control = 6'b011000;  // so sánh not equal, dùng cmp
+            ALU_control = 6'b011000;  // Compare not equal, use cmp
             end
 
         4'b0110: begin // BGTZ
-            ALU_control = 6'b011001;  // so sánh > 0, dùng cmp
+            ALU_control = 6'b011001;  // Comparing with 0 ( > 0), use cmp
         end
 
-        4'b1000: begin // LH/SH - tính address
+        4'b1000: begin // LH/SH - Calculate address
             ALU_control = 6'b011011;  // address = (rs + imm) << 1
          end
        
-         // 0111: JUMP  -> không dùng ALU
-         // 1010: MFSR -> không dùng ALU
-         // 1011: MTSR -> không dùng ALU
-         // 1111: HLT  -> không dùng ALU
+         // 0111: JUMP  -> No using ALU
+         // 1010: MFSR -> No using ALU
+         // 1011: MTSR -> No using ALU
+         // 1111: HLT  -> No using ALU
          
         default: ALU_control = 6'b111111;  // Default: ADDU
         endcase

@@ -24,35 +24,36 @@ module data_mem(
     input        clk,
     input        reset,
 
-    // load/store b? nh?
+    // Memory load/store control
     input        mem_write_en,
     input        mem_read_en,
-    input [15:0] addr,           // ð?a ch? byte, ð? tính s?n ? ALU (start)
+    input [15:0] addr,           // byte address, already computed by ALU
 
-    input [15:0] write_data,     // d? li?u 16-bit t? GPR cho SH
+    input [15:0] write_data,     // 16-bit data from GPR for store-halfword (SH)
 
-    // STACK dùng cho lýu ð?a ch? tr? v? (n?u b?n c?n)
-    input [15:0] sp_addr,        // thý?ng là PC hi?n t?i
-    input        push,           // push vào stack
-    input        pop,            // pop kh?i stack
-    output reg   over_flow,
-    output reg   under_flow,
-    output reg [15:0] ret_addr,  // ð?a ch? tr? v? (PC) khi pop
+    // STACK used to store return addresses (if needed)
+    input [15:0] sp_addr,        // usually the current PC
+    input        push,           // push onto stack
+    input        pop,            // pop from stack
+    output reg   over_flow,      // stack overflow flag
+    output reg   under_flow,     // stack underflow flag
+    output reg [15:0] ret_addr,  // return address (PC) when popping
 
-    // D? li?u ð?c LH
+    // Data for load-halfword (LH)
     output reg [15:0] read_data
 );
 
-    // ===== RAM 4KB: 4096 byte t? 0x0000 t?i 0x0FFF =====
+    // ===== 4KB RAM: 4096 bytes from 0x0000 to 0x0FFF =====
     reg [7:0] memory [0:4095];
 
-    // STACK POINTER: dùng vùng trên cùng c?a RAM
-    // stack ? vùng [0x0FF0 .. 0x0FFE], m?i ph?n t? 2 byte
-    localparam [15:0] STACK_TOP    = 16'h0FFE; // stack r?ng: SP = 0x0FFE
-    localparam [15:0] STACK_BOTTOM = 16'h0FF0; // full khi SP <= 0x0FF0
+    // STACK POINTER: use the top region of RAM
+    // Stack region: [0x0FF0 .. 0x0FFE], each entry is 2 bytes
+    localparam [15:0] STACK_TOP    = 16'h0FFE; // empty stack: SP = 0x0FFE
+    localparam [15:0] STACK_BOTTOM = 16'h0FF0; // stack is full when SP <= 0x0FF0
 
     reg [15:0] sp;
 
+    // Return address is PC + 2 (next instruction)
     wire [15:0] ret_addr_plus_2;
     assign ret_addr_plus_2 = sp_addr + 16'd2;
 
@@ -61,31 +62,31 @@ module data_mem(
     // ===== Sequential logic =====
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            sp         <= STACK_TOP;  // stack r?ng
+            sp         <= STACK_TOP;  // empty stack
             over_flow  <= 1'b0;
             under_flow <= 1'b0;
             ret_addr   <= 16'b0;
 
-            // n?u mu?n clear RAM khi reset th? b? comment ðo?n dý?i,
-            // nhýng synth s? t?n tài nguyên hõn:
+            // If you want to clear RAM on reset, uncomment the block below,
+            // but synthesis will consume more resources:
             /*
             for (i = 0; i < 4096; i = i + 1)
                 memory[i] <= 8'h00;
             */
         end else begin
-            // m?c ð?nh m?i cycle: không báo l?i m?i
+            // By default every cycle: clear new error flags
             over_flow  <= 1'b0;
             under_flow <= 1'b0;
-            // ret_addr gi? nguyên n?u không pop
+            // ret_addr keeps its previous value if there is no pop
 
             // ====== STACK PUSH ======
             if (push) begin
-                // full n?u sp ð? xu?ng t?i ðáy
+                // Overflow if SP has reached the bottom of stack
                 if (sp <= STACK_BOTTOM) begin
                     over_flow <= 1'b1;
                 end else begin
-                    // lýu (sp_addr + 2) lên stack t?i [sp-1 : sp]
-                    // (lower byte ? sp, higher byte ? sp-1)
+                    // Store (sp_addr + 2) on stack at [sp-1 : sp]
+                    // (lower byte at sp, higher byte at sp-1)
                     memory[sp]     <= ret_addr_plus_2[7:0];
                     memory[sp - 1] <= ret_addr_plus_2[15:8];
                     sp             <= sp - 16'd2;
@@ -94,13 +95,13 @@ module data_mem(
 
             // ====== STACK POP ======
             else if (pop) begin
-                // r?ng n?u sp ðang ? TOP
+                // Underflow if SP is at STACK_TOP (stack empty)
                 if (sp >= STACK_TOP) begin
                     under_flow <= 1'b1;
                     ret_addr   <= 16'b0;
                 end else begin
-                    // ph?n t? trên cùng n?m ? [sp+1 : sp+2]
-                    // (v? trý?c ðó khi push sp gi?m 2)
+                    // Top element is stored at [sp+1 : sp+2]
+                    // (because SP was decremented by 2 on push)
                     ret_addr[15:8] <= memory[sp + 16'd1];
                     ret_addr[7:0]  <= memory[sp + 16'd2];
                     sp             <= sp + 16'd2;
@@ -109,10 +110,10 @@ module data_mem(
 
             // ====== MEMORY WRITE (SH) ======
             if (mem_write_en) begin
-                // ghi 16-bit t?i addr (little-endian)
-                // addr ph?i n?m trong [0 .. 4094]
-                memory[addr]     <= write_data[7:0];   // byte th?p
-                memory[addr + 1] <= write_data[15:8];  // byte cao
+                // Write 16-bit word at addr (little-endian)
+                // addr must be in range [0 .. 4094]
+                memory[addr]     <= write_data[7:0];   // low byte
+                memory[addr + 1] <= write_data[15:8];  // high byte
             end
         end
     end
@@ -120,7 +121,7 @@ module data_mem(
     // ===== Combinational read (LH) =====
     always @(*) begin
         if (mem_read_en) begin
-            // ð?c 16-bit t?i addr (little-endian)
+            // Read 16-bit word at addr (little-endian)
             read_data = {memory[addr + 1], memory[addr]};
         end else begin
             read_data = 16'd0;
@@ -128,4 +129,3 @@ module data_mem(
     end
 
 endmodule
-

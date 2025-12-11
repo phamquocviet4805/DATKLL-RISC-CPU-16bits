@@ -34,8 +34,8 @@ module Imm_gen(
             end
 
             // Branch offset: bneq, bgtz
-            // i là s? có d?u, PC <- PC + i*2
-            // -> sign-extend 6 bit r?i << 1
+            // i is signed, PC <- PC + i*2
+            // -> sign-extend 6 bit and << 1
             3'b010,
             3'b011: begin
                 imm_out = {{9{instruction[5]}}, instruction[5:0], 1'b0};
@@ -43,12 +43,12 @@ module Imm_gen(
             end
 
             // Jump: PC <- PC[15:13] || (addr<<1)
-            // addr l?y t? [11:0], không sign-extend
+            // address take [11:0], no sign-extend
 //            3'b100: begin
 //                imm_out = {3'b000, instruction[11:0], 1'b0};
 //            end
 
-            // M?c ð?nh: không dùng immediate
+            // Default: No using immediate (Imm generation)
             default: begin
                 imm_out = 16'b0;
             end
