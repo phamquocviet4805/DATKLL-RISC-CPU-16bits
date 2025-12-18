@@ -1,2 +1,20 @@
 Time resolution is 1 ps
----- CPU Simulation Start ----
+---- FP16 DECIMAL TEST START ----
+t=0 | f3=000 | a=0000 | b=0000 | out=0000
+t=20000 | f3=100 | a=0005 | b=0000 | out=4500
+t=30000 | f3=100 | a=000b | b=0000 | out=4980
+t=40000 | f3=100 | a=fffb | b=0000 | out=c500
+t=50000 | f3=101 | a=3000 | b=0000 | out=0000
+t=60000 | f3=101 | a=3d00 | b=0000 | out=0001
+t=70000 | f3=101 | a=4580 | b=0000 | out=0005
+t=80000 | f3=101 | a=c580 | b=0000 | out=fffb
+t=90000 | f3=011 | a=3000 | b=3400 | out=0001
+t=100000 | f3=011 | a=3a00 | b=3800 | out=0000
+t=110000 | f3=011 | a=c580 | b=4580 | out=0001
+t=120000 | f3=011 | a=3d00 | b=3e00 | out=0001
+t=130000 | f3=010 | a=3000 | b=4000 | out=3400
+t=140000 | f3=010 | a=3d00 | b=3800 | out=3900
+t=150000 | f3=010 | a=4580 | b=3800 | out=4180
+t=160000 | f3=010 | a=c580 | b=3e00 | out=c820
+---- FP16 DECIMAL TEST END ----
+$stop called at time : 210 ns : File "D:/DATKLL/DATKLL_RISC_CPU_16bits/CPU_RISC_16Bits/DATKLL.srcs/sim_1/new/fp16_unit_tb.v" Line 85

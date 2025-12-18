@@ -28,7 +28,7 @@ module Imm_gen(
     always @(*) begin
         case (imm_type)
             // I-type signed: addi, slti, lh, sh
-            // immediate n?m ? [5:0]
+            // immediate [5:0]
             3'b001: begin
                 imm_out = {{10{instruction[5]}}, instruction[5:0]};
             end
@@ -42,11 +42,15 @@ module Imm_gen(
                 //   ^ 9 bit sign + 6 bit + 1 bit shift = 16
             end
 
-            // Jump: PC <- PC[15:13] || (addr<<1)
-            // address take [11:0], no sign-extend
-//            3'b100: begin
-//                imm_out = {3'b000, instruction[11:0], 1'b0};
-//            end
+            // Shift right << 10 (LUI)
+            3'b100: begin
+                imm_out = {instruction[5:0], {10{1'b0}}};
+            end
+            
+            // ORI (no sign)
+            3'b101: begin
+                imm_out = {{10{1'b0}},instruction[5:0]};
+            end
 
             // Default: No using immediate (Imm generation)
             default: begin

@@ -30,13 +30,14 @@ wire is_bnez, mem_read_en, branch_out;
 wire /*clk_1hz ,clk_4hz,clk_100hz,*/ clk_8hz;
 wire reg_wrt, mem_write_en, push, pop, pc_sel, alu_src;
 wire mux_pc_sel, branch, memtoreg, reg_dst, hold_hlt, jump;
-wire ra_signal, at_signal, hi_signal, lo_signal, special_to_reg, hi_from_alu_signal, lo_from_alu_signal;
+wire ra_signal, at_signal, hi_signal, lo_signal, special_to_reg, hi_from_alu_signal, lo_from_alu_signal, fp_signal;
 wire cmp;
 wire [2:0] rs, rt, rd, rd_raw, funct3, immtype, mfsr_sel;
 wire [3:0] opcode, alu_op;
 wire [5:0] alu_sel;
 wire [15:0] instruction;
 wire [15:0] ALU_out, imm_out, outmux, read_data, mfsr_data, wb_mux_out, hi_from_alu_data, lo_from_alu_data;
+wire [15:0] fp_out, mfsr_mux;
 wire [15:0] data_reg, readA_out, readB_out;
 wire [15:0] pc_out, pc, pc_plus2, next_pc, jump_out, pc_branch;
 
@@ -126,11 +127,20 @@ data_mem ic7 (
     .reset(reset));
 
 // ========================= MUX 2 to 1 =========================
+//Mux for rd
 MUX_2_1 ic20 (
     .A(rt),
     .B(rd_raw),
     .mux(reg_dst),
     .outmux(rd));
+
+//Mux for FP16
+MUX_2_1 ic26 (
+    .A(mfsr_mux),
+    .B(fp_out),
+    .mux(fp_signal),
+    .outmux(data_reg)
+    );
 
 //writeback mux
 MUX_2_1 ic8 (
@@ -150,7 +160,7 @@ mux_mtsr_wb ic23(
     .A(wb_mux_out),
     .B(mfsr_data),
     .mux(special_to_reg),
-    .outmux(data_reg));
+    .outmux(mfsr_mux));
 
 // ========================= MUX jump =========================
 
@@ -212,7 +222,9 @@ C_U ic17 (
     .hi_signal(hi_signal),
     .lo_signal(lo_signal),
     .hi_from_alu_signal(hi_from_alu_signal),
-    .lo_from_alu_signal(lo_from_alu_signal)
+    .lo_from_alu_signal(lo_from_alu_signal),
+    
+    .fp_signal(fp_signal)
 );
 
 // ========================= SPECIAL REGISTER =========================
@@ -237,6 +249,14 @@ special_register ic22 (
     .mfsr_sel(mfsr_sel),
     .mfsr_data(mfsr_data)
 );
+
+// ========================= FP 16 =========================
+fp16_unit ic25(
+    .a(rs),
+    .b(rt),
+    .funct3(funct3),
+    .fp_out(fp_out)
+    );
 
 // ========================= CLOCK =========================  
 Clock_div ic18 (

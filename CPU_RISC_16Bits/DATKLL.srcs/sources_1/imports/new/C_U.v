@@ -24,6 +24,7 @@ module C_U(
     output reg mem_read, memtoreg, reg_wrt, alu_src, mem_write, branch, reg_dst, hold_hlt, jump,
     output reg [2:0] immtype, mfsr_sel,
     output reg [3:0] alu_op,
+    output reg fp_signal,
     output reg special_to_reg, ra_signal, at_signal, hi_signal, lo_signal, hi_from_alu_signal, lo_from_alu_signal
 );
 
@@ -49,6 +50,8 @@ always @(*) begin
     lo_signal          = 1'b0;
     hi_from_alu_signal = 1'b0;
     lo_from_alu_signal = 1'b0;
+    
+    fp_signal          = 1'b0;
 
     // ======= Decode by opcode =======
     case (opcode)
@@ -186,6 +189,29 @@ always @(*) begin
                 3'b101: lo_signal = 1'b1; // mtlo
                 default: ;
             endcase
+        end
+        
+        // 1100: FP16 (Foating Point)
+        4'b1100: begin
+            reg_wrt = 1'b1;
+            reg_dst = 1'b1;      // rd  
+            fp_signal = 1'b1;
+        end
+        
+        // 1101: LUI (Load upper Imm)
+        4'b1101: begin
+            reg_wrt = 1'b1;
+            reg_dst = 1'b0;      // rt
+            immtype = 3'b100;
+            alu_src   = 1'b1;
+        end
+        
+        // 1110: Or Imm
+        4'b1110: begin
+            reg_wrt = 1'b1;
+            reg_dst = 1'b0;      // rt
+            immtype = 3'b101;
+            alu_src   = 1'b1;
         end
 
         // 1111: HLT
