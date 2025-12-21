@@ -21,16 +21,17 @@
 
 // INSTRUCTION MEMORY + DECODE
 
-module Ins_Mem(address,opcode,rd,rs1,rs2,funct3,instruction);
-input [15:0]address;
-output [3:0]  opcode;
-output [2:0]  rd;
-output [2:0]  rs1;
-output [2:0]  rs2;
-output [2:0]  funct3;
-wire [2:0]  instr_type;
+module Ins_Mem(address,opcode,rd,rs,rt,funct3,instruction);
+    input [15:0] address;
+    output [3:0] opcode;
+    output [2:0] rd;
+    output [2:0] rs;
+    output [2:0] rt;
+    output [2:0] funct3;
+    output [15:0] instruction; 
+
+wire [2:0] instr_type;
 reg [7:0] imem[0:2047];
-output [15:0] instruction; 
 integer i;
 initial begin
 //    $readmemb("test.prog", imem);
@@ -103,8 +104,8 @@ imem[126] = 8'b1110_0000;
 imem[127] = 8'b0000_0001; // RET
 
 end
-assign instruction = {imem[address],imem[address+1]};
 
+assign instruction = {imem[address],imem[address+1]};
 assign opcode = instruction[15:12];
 
 assign instr_type =
@@ -117,8 +118,8 @@ assign instr_type =
     3'd7;
 
 assign rd  = (instr_type == 3'd0 ) ? instruction[5:3] : 3'b000 ;
-assign rs1 = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[11:9] : 3'b000;
-assign rs2 = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[8:6] : 3'b000;
+assign rs = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[11:9] : 3'b000;
+assign rt = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[8:6] : 3'b000;
     
 assign funct3 = (instr_type == 3'd0 || instr_type == 3'd3 ) ? instruction[2:0] : 3'b000;   // R-type and SYS-type
 

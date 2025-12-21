@@ -22,42 +22,34 @@
 
 // REGISTER FILE
 
-module reg_file(rs1,rs2,rd,data,reg_wrt,readA_out,readB_out,r3,clk);
-input reg_wrt,clk;
-input [2:0]rs1,rs2,rd;
-input [15:0]data;
-output [15:0]readA_out,readB_out;
-output [15:0] r3;
+module reg_file(
+    input reg_wrt, clk,
+    input [2:0] rs, rt, rd,
+    input [15:0] data,
+    output [15:0] readA_out, readB_out,
+    output [15:0] r3
+);
 
-reg [15:0] x [0:8];
-reg [15:0] y [0:7];
-integer i;
+reg [15:0] x [0:7];
+
 initial begin
-    x[0]=0;     // R0 contains zero
-    x[1]=0;     // Stack pointer 
-    x[2]=0;     // Return address
-    x[3]=0;     // Function argument/ result
-    x[4]=0;     // Propram counter
-    x[5]=0;     // Assembler Temporary
-    x[6]=0;     // HI
-    x[7]=0;     // LO
-    x[8]=0;     // Link register/temp/loop/ var
-    y[0]=0;     // General register
-    y[1]=0;     // General register
-    y[2]=0;     // General register
-    y[3]=0;     // General register
-    y[4]=0;     // General register
-    y[5]=0;     // General register
-    y[6]=0;     // General register
-    y[7]=0;     // General register
+    x[0]=0;    
+    x[1]=0;    
+    x[2]=0;     
+    x[3]=0;     
+    x[4]=0;    
+    x[5]=0;     
+    x[6]=0;    
+    x[7]=0;    
 end
 
 always @(posedge clk)
 begin
-    if(reg_wrt==1)
-        x[rd]<=data;
+    if (reg_wrt==1)
+        x[rd] <= data;
 end
-assign readA_out = x[rs1];
-assign readB_out = x[rs2];
-assign r3 = x[3];
+
+assign readA_out = x[rs];
+assign readB_out = x[rt];
+
 endmodule

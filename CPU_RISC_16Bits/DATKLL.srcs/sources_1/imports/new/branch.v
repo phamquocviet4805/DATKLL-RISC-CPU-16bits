@@ -21,7 +21,7 @@
 
 
 module branch(
-    input zero, is_bnez, output branch_out
+    input cmp, branch, output branch_out
     );
-assign branch_out = (is_bnez == 1 && zero ==1) ? 1'b1 : (is_bnez == 0 && zero ==0) ? 1'b1 : 1'b0; // BEQZ & BNQZ
+assign branch_out = (cmp == 1'b1 && branch == 1) ? 1'b1 : 1'b0; 
 endmodule
