@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 11/05/2025 09:31:47 PM
+// Create Date: 12/03/2025 03:15:05 PM
 // Design Name: 
 // Module Name: MUX_jump
 // Project Name: 
@@ -19,7 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module MUX_jump(input [15:0] pc_add_2, [11:0] instruction, jump_signal, [15:0] pc_branch_mux, output [15:0] jump_target);
-    assign jump_target = (jump_signal == 1) ? {pc_add_2[15:13], instruction[11:0], 1'b0}: pc_branch_mux;
+module MUX_jump(input[15:0] pc_jump, pc_branch, input jump_signal, output[15:0] next_pc);
+    assign next_pc = (jump_signal == 1'b1) ? pc_jump : pc_branch;
 endmodule

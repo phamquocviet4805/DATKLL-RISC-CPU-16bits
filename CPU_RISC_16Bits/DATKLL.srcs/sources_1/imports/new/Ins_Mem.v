@@ -30,97 +30,153 @@ module Ins_Mem(address,opcode,rd,rs,rt,funct3,instruction);
     output [2:0] funct3;
     output [15:0] instruction; 
 
-wire [2:0] instr_type;
-reg [7:0] imem[0:2047];
-integer i;
+    wire [2:0] instr_type;
+    reg [7:0] imem[0:2047];
+    
+//initial begin
+//    $readmemh("program.hex", imem);
+//end
 initial begin
-//    $readmemb("test.prog", imem);
-//    $display("==== Test readmemb ins_mem ====");
-//    for(i=0;i<50;i=i+1)
-//    begin
-//        $display("imem[%0d] = %b",i, imem[i]);
-//    end    
-imem[0] = 8'b1110_0000;
-imem[1] = 8'b0000_0010; // EI
 
-imem[2] = 8'b1000_0110; // LI r3 <- 0x01
-imem[3] = 8'b0000_0001; 
+//    imem[0]  = 8'b0011_0000; // 0x30  word0 hi  (addi r1, r0, 5)
+//    imem[1]  = 8'b0100_0101; // 0x45  word0 lo
 
-imem[4] = 8'b1011_0110; // BNQZ r3!=0 ? PC+=4
-imem[5] = 8'b0000_0100; 
+//    imem[2]  = 8'b0011_0000; // 0x30  word1 hi  (addi r2, r0, 3)
+//    imem[3]  = 8'b1000_0011; // 0x83  word1 lo    
 
-imem[6] = 8'b1100_1111; // JMP PC <- PC + (-4)
-imem[7] = 8'b1111_1100; 
+//    imem[4]  = 8'b0000_0010; // 0x02  word2 hi  (addu r3, r1, r2)
+//    imem[5]  = 8'b1001_1000; // 0x98  word2 lo
 
-imem[8] = 8'b0011_0110; // LSLI r3 <- r3 << 1
-imem[9] = 8'b1100_0001; 
+//    imem[6]  = 8'b0010_0110; // 0x26  word3 hi  (shl r4, r3, r2)
+//    imem[7]  = 8'b1010_0001; // 0xA1  word3 lo
 
-imem[10] = 8'b1100_1111; // JMP PC <- PC + (-6)
-imem[11] = 8'b1111_1010; 
+//    imem[8]  = 8'b0000_0010; // 0x02  word4 hi  (multu r1, r2)
+//    imem[9]  = 8'b1000_0010; // 0x82  word4 lo
 
-imem[12] = 8'b1110_0000; // NOP
-imem[13] = 8'b0000_0000; 
+//    imem[10] = 8'b1010_0000; // 0xA0  word5 hi  (mflo -> r5)
+//    imem[11] = 8'b0010_1101; // 0x2D  word5 lo
 
-imem[100] = 8'b1000_0100;
-imem[101] = 8'b0000_0101; // LI r2 <- 5
+//    imem[12] = 8'b1010_0000; // 0xA0  word6 hi  (mfhi -> r6)
+//    imem[13] = 8'b0011_0100; // 0x34  word6 lo
 
-imem[102] = 8'b0001_0110;
-imem[103] = 8'b0100_0000; // ADDI r1 <- r3 + 0
+//    imem[14] = 8'b1011_0001; // 0xB1  word7 hi  (mtra r5 -> RA)
+//    imem[15] = 8'b0100_0010; // 0x42  word7 lo
 
-imem[104] = 8'b1000_1010;
-imem[105] = 8'b1111_1111; // LI r5 <- 255
+//    imem[16] = 8'b1011_0001; // 0xB1  word8 hi  (mtat r6 -> AT)
+//    imem[17] = 8'b1000_0011; // 0x83  word8 lo
 
-imem[106] = 8'b0011_1011;
-imem[107] = 8'b0000_1000; // LSLI r4 <- r5 << 8
+//    imem[18] = 8'b1010_0000; // 0xA0  word9 hi  (mfra -> r7)
+//    imem[19] = 8'b0011_1010; // 0x3A  word9 lo
 
-imem[108] = 8'b0000_1011;
-imem[109] = 8'b0001_1100; // OR r3 <- r4 + r5
+//    imem[20] = 8'b1010_0000; // 0xA0  word10 hi (mfat -> r4)
+//    imem[21] = 8'b0010_0011; // 0x23  word10 lo
 
-imem[110] = 8'b1110_0000;
-imem[111] = 8'b0000_0000; // NOP
+//    imem[22] = 8'b1001_0000; // 0x90  word11 hi (sh r3, 0(r0))
+//    imem[23] = 8'b1100_0000; // 0xC0  word11 lo
 
-imem[112] = 8'b1110_0000;
-imem[113] = 8'b0000_0000; // NOP
+//    imem[24] = 8'b1000_0001; // 0x81  word12 hi (lh r6, 0(r0))
+//    imem[25] = 8'b1000_0000; // 0x80  word12 lo
 
-imem[114] = 8'b1110_0000;
-imem[115] = 8'b0000_0000; // NOP
+//    imem[26] = 8'b0101_1100; // 0x5C  word13 hi (bneq r6, r3, 1)
+//    imem[27] = 8'b1100_0001; // 0xC1  word13 lo
 
-imem[116] = 8'b1000_0110;
-imem[117] = 8'b0000_0000; // LI r3 <- 0
+//    imem[28] = 8'b0011_0001; // 0x31  word14 hi (addi r7, r0, 1)
+//    imem[29] = 8'b1100_0001; // 0xC1  word14 lo
 
-imem[118] = 8'b1010_0100;
-imem[119] = 8'b0000_0110; // BEQZ r2==0 ? PC+=6
+//    imem[30] = 8'b0110_1110; // 0x6E  word15 hi (bgtz r7, 1)
+//    imem[31] = 8'b0000_0001; // 0x01  word15 lo
 
-imem[120] = 8'b0010_0100;
-imem[121] = 8'b1000_0001; // SUBI r2 <- r2 - 1
+//    imem[32] = 8'b0011_0001; // 0x31  word16 hi (addi r7, r0, 2)  ; skipped by bgtz imem[30]
+//    imem[33] = 8'b1100_0010; // 0xC2  word16 lo
 
-imem[122] = 8'b1100_1111;
-imem[123] = 8'b1111_0010; // JMP PC <- PC + (-14)
+//    imem[34] = 8'b0011_0001; // 0x31  word17 hi (addi r7, r0, 3)
+//    imem[35] = 8'b1100_0011; // 0xC3  word17 lo
 
-imem[124] = 8'b0001_0010;
-imem[125] = 8'b1100_0000; // ADDI r3 <- r1 + 0
+//    imem[36] = 8'b0111_0000; // 0x70  word18 hi (j 20)
+//    imem[37] = 8'b0001_0100; // 0x14  word18 lo
 
-imem[126] = 8'b1110_0000;
-imem[127] = 8'b0000_0001; // RET
+//    imem[38] = 8'b0011_0000; // 0x30  word19 hi (addi r1, r0, 9)  ; skipped by jump imem[36]
+//    imem[39] = 8'b0100_1001; // 0x49  word19 lo
 
+//    imem[40] = 8'b0011_0000; // 0x30  word20 hi (addi r1, r0, 4)
+//    imem[41] = 8'b0100_0100; // 0x44  word20 lo
+
+//    imem[42] = 8'b1111_0000; // 0xF0  word21 hi (hlt)
+//    imem[43] = 8'b0000_0000; // 0x00  word21 lo
+
+// =====================================================
+
+imem[0]  = 8'b0011_0000; // 0x30 hi         addi r1, r0, 3
+imem[1]  = 8'b0100_0011; // 0x43 lo
+
+imem[2]  = 8'b0011_0000; // 0x30 hi         addi r2, r0, -8  
+imem[3]  = 8'b1011_1000; // 0xB8 lo
+
+imem[4]  = 8'b0000_0010; // 0x02 hi         shra r3, r2, r1
+imem[5]  = 8'b1001_1100; // 0x9C lo         EXPECT: r3 = 0xFFFF
+
+imem[6]  = 8'b1101_0001; // 0xD1 hi         lui r4, 1
+imem[7]  = 8'b0000_0001; // 0x01 lo
+
+imem[8]  = 8'b0000_0001; // 0x01 hi         bitrev r5, r4 
+imem[9]  = 8'b0010_1101; // 0x2D lo         EXPECT: bitrev(0x0400)=0x0020
+
+imem[10] = 8'b0000_0001; // 0x01 hi         clz r6, r4 
+imem[11] = 8'b0011_0110; // 0x36 lo         EXPECT: clz(0x0400)=5
+
+imem[12] = 8'b0000_0001; // 0x01 hi         ctz r7, r4 
+imem[13] = 8'b0011_1111; // 0x3F lo         EXPECT: ctz(0x0400)=1
+
+imem[14] = 8'b1101_0000; // 0xD0 hi         lui r2, 63
+imem[15] = 8'b1011_1111; // 0xBF lo
+
+imem[16] = 8'b1110_0100; // 0xE4 hi         ori r2, r2, 11
+imem[17] = 8'b1000_1011; // 0x8B lo
+
+imem[18] = 8'b0000_0000; // 0x00 hi         clz r6, r2 
+imem[19] = 8'b1011_0110; // 0xB6 lo
+
+imem[20] = 8'b0000_0000; // 0x00 hi         ctz r7, r2
+imem[21] = 8'b1011_1111; // 0xBF lo
+
+imem[22] = 8'b1111_0000; // 0xF0 hi         (hlt)
+imem[23] = 8'b0000_0000; // 0x00 lo
 end
 
-assign instruction = {imem[address],imem[address+1]};
-assign opcode = instruction[15:12];
-
-assign instr_type =
-    (opcode == 4'b0000 || opcode == 4'b0001 || opcode == 4'b0010 || 
-     opcode == 4'b1010 || opcode == 4'b1011) ? 3'd0 :                           // R-type
-    (opcode >= 4'b1000 && opcode <= 4'b0110) ? 3'd1 :                           // I-type
-    (opcode == 4'b1000 || opcode == 4'b1001) ? 3'd1 :                           // I-type
-    (opcode == 4'b0111 || opcode == 4'b1011 || opcode == 4'b1111) ? 3'd2 :      // J-type
-    (opcode == 4'b1110) ? 3'd3:                                                 // SYS-type
-    3'd7;
-
-assign rd  = (instr_type == 3'd0 ) ? instruction[5:3] : 3'b000 ;
-assign rs = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[11:9] : 3'b000;
-assign rt = (instr_type == 3'd0 || instr_type == 3'd1) ? instruction[8:6] : 3'b000;
+    integer i;
     
-assign funct3 = (instr_type == 3'd0 || instr_type == 3'd3 ) ? instruction[2:0] : 3'b000;   // R-type and SYS-type
+    assign instruction = {imem[address],imem[address+1]};
+    assign opcode = instruction[15:12];
 
+    // Seperate opcode by spec
+    wire is_r_type = (opcode == 4'b0000 || // ALU0
+                      opcode == 4'b0001 || // ALU1
+                      opcode == 4'b0010 || // ALU2
+                      opcode == 4'b1010 || // MFSR
+                      opcode == 4'b1011 || // MTSR
+                      opcode == 4'b1100);  // FP16
+              
+
+    wire is_i_type = (opcode == 4'b0011 || // ADDI
+                      opcode == 4'b0100 || // SLTI
+                      opcode == 4'b0101 || // BNEQ
+                      opcode == 4'b0110 || // BGTZ
+                      opcode == 4'b1000 || // LH
+                      opcode == 4'b1001 || // SH
+                      opcode == 4'b1101 || // LUI
+                      opcode == 4'b1110);  // ORI
+
+    wire is_j_type = (opcode == 4'b0111 || // JUMP
+                      opcode == 4'b1111);  // HLT
+
+    // rs, rt, rd, funct3 theo format:
+    // [15:12] opcode
+    // [11:9]  rs
+    // [8:6]   rt
+    // [5:3]   rd (only R-type)
+    // [2:0]   funct3 (R-type, SYS-type)
+    assign rs     = (is_r_type || is_i_type) ? instruction[11:9] : 3'b000;
+    assign rt     = (is_r_type || is_i_type) ? instruction[8:6]  : 3'b000;
+    assign rd     = (is_r_type)              ? instruction[5:3]  : 3'b000;
+    assign funct3 = (is_r_type || opcode == 4'b1110) ? instruction[2:0] : 3'b000;
 endmodule

@@ -21,18 +21,54 @@
 
 
 module ALU(
-    input signed [15:0] A, B,
-    input [5:0] alu_sel,          
-    output reg [15:0] ALU_out, hi_from_alu, lo_from_alu,
+    input signed [15:0] A, B, 
+    input [5:0] alu_sel,      
+    output reg [15:0] ALU_out, hi_from_alu, lo_from_alu,  
     output reg cmp
 );
 reg [31:0] mult_result;
+
+function automatic [15:0] f_clz16(input [15:0] x);
+    integer i;
+    begin
+        f_clz16 = 16;
+        for (i = 15; i >= 0; i = i - 1) begin
+            if (x[i]) begin
+                f_clz16 = 15 - i;
+                i = -1; // Out loop (hack synth-friendly)
+            end
+        end
+    end
+endfunction
+
+function automatic [15:0] f_ctz16(input [15:0] x);
+    integer i;
+    begin
+        f_ctz16 = 16;
+        for (i = 0; i < 16; i = i + 1) begin
+            if (x[i]) begin
+                f_ctz16 = i;
+                i = 16; // Out loop
+            end
+        end
+    end
+endfunction
+
+function automatic [15:0] f_bitrev16(input [15:0] x);
+    integer i;
+    begin
+        f_bitrev16 = 16'b0;
+        for (i = 0; i < 16; i = i + 1)
+            f_bitrev16[i] = x[15 - i];
+    end
+endfunction
 
 always @(*) begin
     // Default Value
     ALU_out = 16'b0;
     cmp = 1'b0;
-
+    hi_from_alu = 16'b0;
+    lo_from_alu = 16'b0;
 
     case (alu_sel)
         //ALU0: Unsigned
@@ -84,13 +120,23 @@ always @(*) begin
         6'b010001: ALU_out = B << A[3:0];                                // SHL
         6'b010010: ALU_out = (B >> A[3:0]) | (B << (16 - A[3:0]));       // ROR
         6'b010011: ALU_out = (B << A[3:0]) | (B >> (16 - A[3:0]));       // ROL
-
+        6'b010100: ALU_out = $signed(B) >>> A[3:0];                      // SHRA 
+        6'b010101: ALU_out = f_bitrev16(B);                              // BITREV
+        6'b010110: ALU_out = f_clz16(B);                                 // CLZ
+        6'b010111: ALU_out = f_ctz16(B);                                 // CTZ
+                
         //Comparation for branching
         6'b011000: cmp = (A == B) ? 1'b0 : 1'b1;                       // Not Equal
         6'b011001: cmp = (A > B)  ? 1'b1 : 1'b0;                       // Greater than
 
         //Memory instruction
-        6'b011011: ALU_out = (A & 16'hFFFE) + (B << 1);                  //lh - sh
+        6'b011011: ALU_out = (((A & 16'hFFFE) + B) << 1);                  //lh - sh
+
+        // Load upper Imm
+        6'b011100: ALU_out = A || B; 
+        
+        // Or Imm
+        6'b011101: ALU_out = A || B;
 
         default: begin
             ALU_out = A | B; 

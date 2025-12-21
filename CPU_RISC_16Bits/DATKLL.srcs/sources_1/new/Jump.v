@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 07/31/2025 01:21:50 PM
+// Create Date: 12/05/2025 10:33:21 PM
 // Design Name: 
-// Module Name: debounce_interrupt
+// Module Name: Jump
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,10 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module debounce_interrupt( input interrupt_pending, clk, output interrupt_rise );
-    reg prev_interrupt_pending;
-    always @(negedge clk) begin
-        prev_interrupt_pending <= interrupt_pending;
-    end
-    assign interrupt_rise = (~prev_interrupt_pending & interrupt_pending);
+module Jump(input [15:0] pc, [11:0] instruction, output [15:0] jump_target);
+    assign jump_target = {pc[15:13], instruction[11:0], 1'b0};
 endmodule
