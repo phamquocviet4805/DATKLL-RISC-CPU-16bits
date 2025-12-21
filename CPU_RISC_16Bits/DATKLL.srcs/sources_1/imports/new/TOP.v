@@ -177,6 +177,21 @@ MUX_jump ic21(
     .next_pc(next_pc)
     );
     
+mux_mtsr_wb ic23(
+    .A(wb_mux_out),
+    .B(mfsr_data),
+    .mux(special_to_reg),
+    .outmux(data_reg));
+
+// ========================= MUX jump =========================
+MUX_jump ic21(
+    .pc_add_2(pc_add_2),
+    .pc_branch_mux(pc_mux),
+    .jump_signal(jump),
+    .instruction(instruction),
+    .jump_target(next_pc)
+    );
+    
 //MUX_3_1_RET ic16 (
 //    .A(in_mux),
 //    .B(ret_addr),
